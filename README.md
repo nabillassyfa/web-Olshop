@@ -1,9 +1,11 @@
 pelanggan  
-_id: '1',  
-nama: 'Revana Faliha Salma',  
-email: 'rerevana@gmail.com',  
-no_hp: '081234567890',  
-alamat: 'Jl. Gegerkalong no 102'  
+_id: "1",  
+username:"rere",
+"password":"reee",
+nama: "Revana Faliha Salma",  
+email: "rerevana@gmail.com",  
+no_hp: "081234567890",  
+alamat: "Jl. Gegerkalong no 102"  
   
 produk  
 "_id": "1",  
