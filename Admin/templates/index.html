@@ -1,15 +1,6 @@
-<!-- /*
-* Bootstrap 5
-* Template Name: Furni
-* Template Author: Untree.co
-* Template URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from themewagon.github.io/furni/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:31:58 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -19,88 +10,209 @@
   <meta name="description" content="" />
   <meta name="keywords" content="bootstrap, bootstrap4" />
 
-		<!-- Bootstrap CSS -->
-		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='assets/font-awesome/css/all.min.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/tiny-slider.css') }}" rel="stylesheet">
-		<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
-		<title>Fashion Admin</title>
-	</head>
+  <!-- Bootstrap CSS -->
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='assets/font-awesome/css/all.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/tiny-slider.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <title>Fashion Admin</title>
 
-	<body>
+  <style>
+    /* Style adjustments for table view */
+    #productTable {
+      display: none;
+    }
+  </style>
+</head>
 
-		<!-- Start Header/Navigation -->
-		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+<body>
 
-			<div class="container">
-				<a class="navbar-brand" href="{{ url_for('index') }}">Fashion<span>.</span></a>
-			
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			
-				<div class="collapse navbar-collapse" id="navbarsFurni">
-					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
-						<li class="nav-item active">
-							<a class="nav-link" href="{{ url_for('index') }}">Home</a>
-						</li>
-                        <li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
-					</ul>
+  <!-- Start Header/Navigation -->
+  <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+    <div class="container">
+      <a class="navbar-brand" href="{{ url_for('index') }}">Fashion<span>.</span></a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
+        aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsFurni">
+        <ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('index') }}">Home</a>
+          </li>
+          <li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- End Header/Navigation -->
+
+
+
+  <div class="product-section">
+    <div class="container">
+      <h2 class="mb-4 section-title">Daftar produk.</h2>
+      <div class="mb-4">
+        <!-- Toggle Button -->
+        <button onclick="toggleView('list')" class="btn btn-primary">Card View</button>
+        <button onclick="toggleView('table')" class="btn btn-primary">Table View</button>
+		<button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tambahProdukModal">Tambah Produk</button>
+		  <!-- Modal Tambah Produk -->
+		  <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+			  <div class="modal-content">
+				<div class="modal-header">
+				  <h5 class="modal-title" id="tambahProdukModalLabel">Tambah Produk</h5>
+				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
-			</div>			
-		</nav>
-		<!-- End Header/Navigation -->
-
-		<div class="product-section">
-            <div class="container">
-                <h1 class="mb-3">Daftar Produk</h1>
-				<div class="row">
-            
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
-						<a class="product-item" href="cart.html">
-							<img src="{{ url_for('static', filename='images/product-1.png') }}" class="img-fluid product-thumbnail">
-							<h3 class="product-title">Nordic Chair</h3>
-                            <h6 class="card-subtitle mb-2 text-muted">Category: Outer</h6>
-                            <p class="card-subtitle">Smartwatch dengan fitur kesehatan dan notifikasi pesan.</p>
-                            <p class="card-subtitle">Stock: 20</p>
-                            <p class="card-subtitle">Rating: 20</p>
-							<strong class="product-price">$50.00</strong>
-						</a>
-					</div> 
-
-				</div>
-			</div>
-		</div>
-		<!-- End Product Section -->
-
-		<!-- Start Footer Section -->
-		<footer class="footer-section">
-			<div class="container relative">
-				<div class="border-top copyright">
-					<div class="row pt-4">
-						<div class="col-lg-6">
-							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co/">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ --></p>
-						</div>
-
-						<div class="col-lg-6 text-center text-lg-end">
-							<ul class="list-unstyled d-inline-flex ms-auto">
-								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
-								<li><a href="#">Privacy Policy</a></li>
-							</ul>
-						</div>
-
+				<div class="modal-body">
+				  <form action="{{ url_for('tambah_produk') }}" method="POST">
+					<div class="mb-3">
+					  <label for="nama" class="form-label">Nama Produk</label>
+					  <input type="text" class="form-control" id="nama" name="nama" required>
 					</div>
+					<div class="mb-3">
+					  <label for="kategori" class="form-label">Kategori</label>
+					  <input type="text" class="form-control" id="kategori" name="kategori" required>
+					</div>
+					<div class="mb-3">
+					  <label for="stok" class="form-label">Stok</label>
+					  <input type="number" class="form-control" id="stok" name="stok" required>
+					</div>
+					<div class="mb-3">
+					  <label for="stok" class="form-label">Deskripsi</label>
+					  <input type="text" class="form-control" id="deskripsi" name="deskripsi" required>
+					</div>
+					<div class="mb-3">
+					  <label for="rating" class="form-label">Rating</label>
+					  <input type="number" step="0.1" class="form-control" id="rating" name="rating" required>
+					</div>
+					<div class="mb-3">
+					  <label for="harga" class="form-label">Harga</label>
+					  <input type="number" class="form-control" id="harga" name="harga" required>
+					</div>
+					<div class="mb-3">
+					  <label for="gambar" class="form-label">URL Gambar</label>
+					  <input type="text" class="form-control" id="gambar" name="gambar" required>
+					</div>
+					<button type="submit" class="btn btn-primary">Tambah Produk</button>
+				  </form>
 				</div>
-
+			  </div>
 			</div>
-		</footer>
-		<!-- End Footer Section -->	
+		  </div>
+		
+		  <!-- Flash Message Display -->
+		  {% with messages = get_flashed_messages() %}
+			{% if messages %}
+			  <div class="container mt-3">
+				{% for message in messages %}
+				  <div class="alert alert-success">{{ message }}</div>
+				{% endfor %}
+			  </div>
+			{% endif %}
+		  {% endwith %}
+      </div>
 
+      <!-- List/Card View -->
+      <div id="productList">
+        <div class="row">
+          {% for produk in produk %}
+          <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
+            <a class="product-item" href="#">
+              <img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail">
+              <h3 class="product-title">{{ produk.nama }}</h3>
+              <h6 class="card-subtitle mb-2 text-muted">Kategori: {{ produk.kategori }}</h6>
+              <p class="card-subtitle">Stok: {{ produk.stok }}</p>
+              <p class="card-subtitle">Rating: {{ produk.rating }}</p>
+              <strong class="product-price">Rp{{ "{:,.0f}".format(produk.harga) }}</strong>
+            </a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
 
-		<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
-		<script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+      <!-- Table View -->
+		<div id="productTable">
+			<table class="table table-bordered">
+			<thead>
+				<tr>
+				<th>Gambar</th>
+				<th>Nama</th>
+				<th>Kategori</th>
+				<th>Stok</th>
+				<th>Deskripsi</th>
+				<th>Rating</th>
+				<th>Harga</th>
+				<th>Aksi</th> <!-- Action column -->
+				</tr>
+			</thead>
+			<tbody>
+				{% for produk in produk %}
+				<tr>
+				<td><img src="{{ produk['gambar'] }}" alt="{{ produk.nama }}" class="img-fluid" style="max-width: 80px;"></td>
+				<td>{{ produk.nama }}</td>
+				<td>{{ produk.kategori }}</td>
+				<td>{{ produk.stok }}</td>
+				<td>{{ produk.deskripsi }}</td>
+				<td>{{ produk.rating }}</td>
+				<td>Rp{{ "{:,.0f}".format(produk.harga) }}</td>
+				<td>
+					<form action="{{ url_for('hapus_produk', produk_id=produk['_id']) }}" method="POST" style="display: inline;">
+					<button type="submit" class="btn btn-danger">Hapus</button>
+					</form>
+				</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+			</table>
+		</div>  
+    </div>
+  </div>
+  <!-- End Product Section -->
 
-	</body>
+  <!-- Start Footer Section -->
+  <footer class="footer-section">
+    <div class="container relative">
+      <div class="border-top copyright">
+        <div class="row pt-4">
+          <div class="col-lg-6">
+            <p class="mb-2 text-center text-lg-start">Copyright &copy;
+              <script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with
+              love by <a href="https://untree.co/">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>
+            </p>
+          </div>
+          <div class="col-lg-6 text-center text-lg-end">
+            <ul class="list-unstyled d-inline-flex ms-auto">
+              <li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+              <li><a href="#">Privacy Policy</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <!-- End Footer Section -->
+
+  <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+  <script>
+    function toggleView(view) {
+      const productList = document.getElementById('productList');
+      const productTable = document.getElementById('productTable');
+      if (view === 'table') {
+        productList.style.display = 'none';
+        productTable.style.display = 'block';
+      } else {
+        productList.style.display = 'block';
+        productTable.style.display = 'none';
+      }
+    }
+  </script>
+</body>
 
 </html>
