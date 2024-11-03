@@ -1,5 +1,6 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 from pymongo import MongoClient
+import os
 
 app = Flask(__name__, static_folder='static')
 
@@ -7,6 +8,8 @@ app = Flask(__name__, static_folder='static')
 client = MongoClient("mongodb://localhost:27017/")
 db = client["olshop"]
 pelanggan_collection = db.pelanggan  # Koleksi pelanggan
+
+app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
 
 @app.route('/')
 def index():
@@ -31,6 +34,10 @@ def tambah_pelanggan():
 def shop():
     return render_template('shop.html')
 
+@app.route('/home')
+def home():
+    return render_template('index.html')
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -51,6 +58,54 @@ def contact():
 def cart():
     return render_template('cart.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/register')
+def register():
+    return render_template('register.html')
+
+@app.route('/login', methods=['GET', 'POST'])
+def loginPW():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        pelanggan = pelanggan_collection.find_one({"username": username})
+        
+        if pelanggan and pelanggan['password'] == password:  
+            session['username'] = username  
+            flash("Login berhasil!", "success")
+            return redirect(url_for('home'))
+        else:
+            flash("Username atau password salah!", "danger")
+            return redirect(url_for('login'))
+    
+    return render_template('login.html')
+
+@app.route('/register', methods=['GET', 'POST'])
+def daftar():
+    if request.method == 'POST':
+        nama = request.form['nama']
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+        no_hp = request.form['no_hp']
+
+        # Simpan user di database
+        pelanggan_data = {
+            "nama": nama,
+            "username": username,
+            "password": password,
+            "email": email,
+            "no_hp": no_hp
+        }
+        pelanggan_collection.insert_one(pelanggan_data)
+        flash("Registrasi berhasil! Silakan login.", "success")
+        return redirect(url_for('login'))
+    
+    return render_template('register.html')
 
 # # Endpoint untuk menghapus pelanggan
 # @app.route('/pelanggan/<id>', methods=['DELETE'])
