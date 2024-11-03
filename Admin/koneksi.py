@@ -11,5 +11,9 @@ db = client['utsolshop']
 def index():
     return render_template('index.html')
 
+@app.route('/pesanan')
+def pesanan():
+    return render_template('pesanan.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
