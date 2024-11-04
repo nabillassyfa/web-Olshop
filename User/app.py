@@ -8,7 +8,8 @@ app = Flask(__name__, static_folder='static')
 client = MongoClient("mongodb://localhost:27017/")
 db = client["olshop"]
 pelanggan_collection = db.pelanggan  # Koleksi pelanggan
-
+produk_collection = db.produk  # Koleksi pesanan
+pesanan_collection = db.pesanan  # Koleksi pesanan
 app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
 
 @app.route('/')
@@ -66,6 +67,14 @@ def login():
 def register():
     return render_template('register.html')
 
+@app.route('/checkout')
+def checkout():
+    return render_template('checkout.html')
+
+@app.route('/thankyou')
+def thankyou():
+    return render_template('thankyou.html')
+
 @app.route('/login', methods=['GET', 'POST'])
 def loginPW():
     if request.method == 'POST':
@@ -107,35 +116,67 @@ def daftar():
     
     return render_template('register.html')
 
-# # Endpoint untuk menghapus pelanggan
-# @app.route('/pelanggan/<id>', methods=['DELETE'])
-# def hapus_pelanggan(id):
-#     result = pelanggan_collection.delete_one({"_id": id})
-#     if result.deleted_count > 0:
-#         return jsonify({"msg": "Pelanggan berhasil dihapus!"})
-#     else:
-#         return jsonify({"msg": "Pelanggan tidak ditemukan!"}), 404
+# Endpoint untuk menghapus pelanggan
+@app.route('/pelanggan/<id>', methods=['DELETE'])
+def hapus_pelanggan(id):
+    result = pelanggan_collection.delete_one({"_id": id})
+    if result.deleted_count > 0:
+        return jsonify({"msg": "Pelanggan berhasil dihapus!"})
+    else:
+        return jsonify({"msg": "Pelanggan tidak ditemukan!"}), 404
 
-# # Endpoint untuk memperbarui pelanggan
-# @app.route('/pelanggan/<id>', methods=['PUT'])
-# def update_pelanggan(id):
-#     data = request.json
-#     update_data = {}
+# Endpoint untuk memperbarui pelanggan
+@app.route('/pelanggan/<id>', methods=['PUT'])
+def update_pelanggan(id):
+    data = request.json
+    update_data = {}
 
-#     if "nama" in data:
-#         update_data["nama"] = data["nama"]
-#     if "email" in data:
-#         update_data["email"] = data["email"]
-#     if "no_hp" in data:
-#         update_data["no_hp"] = data["no_hp"]
-#     if "alamat" in data:
-#         update_data["alamat"] = data["alamat"]
+    if "nama" in data:
+        update_data["nama"] = data["nama"]
+    if "email" in data:
+        update_data["email"] = data["email"]
+    if "no_hp" in data:
+        update_data["no_hp"] = data["no_hp"]
+    if "alamat" in data:
+        update_data["alamat"] = data["alamat"]
 
-#     result = pelanggan_collection.update_one({"_id": id}, {"$set": update_data})
-#     if result.modified_count > 0:
-#         return jsonify({"msg": "Data pelanggan berhasil diperbarui!"})
-#     else:
-#         return jsonify({"msg": "Pelanggan tidak ditemukan atau tidak ada perubahan!"}), 404
+    result = pelanggan_collection.update_one({"_id": id}, {"$set": update_data})
+    if result.modified_count > 0:
+        return jsonify({"msg": "Data pelanggan berhasil diperbarui!"})
+    else:
+        return jsonify({"msg": "Pelanggan tidak ditemukan atau tidak ada perubahan!"}), 404
+
+# Hapus pesanan
+@app.route('/pesanan/<id>', methods=['DELETE'])
+def hapus_pesanan(id):
+    result = pesanan_collection.delete_one({"_id": id})
+    if result.deleted_count > 0:
+        return jsonify({"msg": "Pelanggan berhasil dihapus!"})
+    else:
+        return jsonify({"msg": "Pelanggan tidak ditemukan!"}), 404
+
+# Menampilkan pesanan
+@app.route('/pesanan/<id_pembeli>', methods=['GET'])
+def daftar_pesanan(id_pembeli):
+    pipeline = [
+        {
+            "$match": {"id_pembeli": id_pembeli}  
+        },
+        {
+            "$lookup": {
+                "from": "produk",  
+                "localField": "id_produk", 
+                "foreignField": "id_produk",  
+                "as": "produk_info" 
+            }
+        },
+        {
+            "$unwind": "$produk_info"  
+        }
+    ]
+
+    daftar_pesanan = pesanan_collection.aggregate(pipeline)
+    return render_template('daftar_pesanan.html', daftar_pesanan=daftar_pesanan)
 
 if __name__ == '__main__':
     app.run(debug=True)

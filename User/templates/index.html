@@ -1,15 +1,6 @@
-<!-- /*
-* Bootstrap 5
-* Template Name: Furni
-* Template Author: Untree.co
-* Template URI: https://untree.co/
-* License: https://creativecommons.org/licenses/by/3.0/
-*/ -->
 <!doctype html>
 <html lang="en">
 
-<!-- Mirrored from themewagon.github.io/furni/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:31:58 GMT -->
-<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -24,6 +15,8 @@
 		<link href="{{ url_for('static', filename='assets/font-awesome/css/all.min.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='css/tiny-slider.css') }}" rel="stylesheet">
 		<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 		<title>Furni Free Bootstrap 5 Template for Furniture and Interior Design Websites by Untree.co </title>
 	</head>
 
@@ -69,12 +62,12 @@
 							<div class="intro-excerpt">
 								<h1>Modern Interior <span clsas="d-block">Design Studio</span></h1>
 								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
-								<p><a href="#" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
+								<p><a href="{{ url_for('shop') }}" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
 							</div>
 						</div>
 						<div class="col-lg-7">
 							<div class="hero-img-wrap">
-								<img src="images/couch.png" class="img-fluid">
+								<img src="{{ url_for('static', filename='images/model.png') }}" class="img-fluid">
 							</div>
 						</div>
 					</div>
@@ -89,15 +82,15 @@
 
 					<!-- Start Column 1 -->
 					<div class="col-md-12 col-lg-3 mb-5 mb-lg-0">
-						<h2 class="mb-4 section-title">Crafted with excellent material.</h2>
-						<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique. </p>
-						<p><a href="shop.html" class="btn">Explore</a></p>
+						<h2 class="mb-4 section-title">Dibuat dengan Material Berkualitas Tinggi</h2>
+						<p class="mb-4">Setiap produk kami dibuat dengan bahan berkualitas terbaik, memberikan kenyamanan dan daya tahan yang sempurna. Pilihan material yang selektif membuat Anda tampil stylish sekaligus merasa nyaman sepanjang hari. </p>
+						<p><a href="{{ url_for('shop') }}" class="btn">Explore</a></p>
 					</div> 
 					<!-- End Column 1 -->
 
 					<!-- Start Column 2 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
+						<a class="product-item" href="{{ url_for('cart') }}">
 							<img src="images/product-1.png" class="img-fluid product-thumbnail">
 							<h3 class="product-title">Nordic Chair</h3>
 							<strong class="product-price">$50.00</strong>
@@ -111,7 +104,7 @@
 
 					<!-- Start Column 3 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
+						<a class="product-item" href="{{ url_for('cart') }}">
 							<img src="images/product-2.png" class="img-fluid product-thumbnail">
 							<h3 class="product-title">Kruzo Aero Chair</h3>
 							<strong class="product-price">$78.00</strong>
@@ -125,7 +118,7 @@
 
 					<!-- Start Column 4 -->
 					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0">
-						<a class="product-item" href="cart.html">
+						<a class="product-item" href="{{ url_for('cart') }}">
 							<img src="images/product-3.png" class="img-fluid product-thumbnail">
 							<h3 class="product-title">Ergonomic Chair</h3>
 							<strong class="product-price">$43.00</strong>
@@ -147,47 +140,47 @@
 			<div class="container">
 				<div class="row justify-content-between">
 					<div class="col-lg-6">
-						<h2 class="section-title">Why Choose Us</h2>
-						<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
+						<h2 class="section-title">Mengapa Memilih Kami</h2>
+						<p>Nikmati layanan kami yang penuh kenyamanan. Dapatkan pengalaman berbelanja yang mudah dan menguntungkan dengan kualitas layanan terbaik.</p>
 
 						<div class="row my-5">
 							<div class="col-6 col-md-6">
 								<div class="feature">
 									<div class="icon">
-										<img src="images/truck.svg" alt="Image" class="imf-fluid">
+										<img src="{{ url_for('static', filename='images/truck.svg') }}" alt="Image" class="imf-fluid">
 									</div>
-									<h3>Fast &amp; Free Shipping</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<h3>Pengiriman Cepat & Gratis</h3>
+									<p>Nikmati pengiriman cepat dan gratis. Layanan kami membuat produk pilihan Anda tiba tepat waktu dan tanpa biaya tambahan.</p>
 								</div>
 							</div>
 
 							<div class="col-6 col-md-6">
 								<div class="feature">
 									<div class="icon">
-										<img src="images/bag.svg" alt="Image" class="imf-fluid">
+										<img src="{{ url_for('static', filename='images/bag.svg') }}" alt="Image" class="imf-fluid">
 									</div>
-									<h3>Easy to Shop</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<h3>Mudah untuk Berbelanja</h3>
+									<p>Dengan sistem yang ramah pengguna, proses belanja jadi lebih mudah dan menyenangkan, kapan saja dan di mana saja.</p>
 								</div>
 							</div>
 
 							<div class="col-6 col-md-6">
 								<div class="feature">
 									<div class="icon">
-										<img src="images/support.svg" alt="Image" class="imf-fluid">
+										<img src="{{ url_for('static', filename='images/support.svg') }}" alt="Image" class="imf-fluid">
 									</div>
-									<h3>24/7 Support</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<h3>Dukungan 24/7</h3>
+									<p>Layanan pelanggan kami siap membantu Anda selama 24 jam setiap hari, kapan pun Anda butuhkan.</p>
 								</div>
 							</div>
 
 							<div class="col-6 col-md-6">
 								<div class="feature">
 									<div class="icon">
-										<img src="images/return.svg" alt="Image" class="imf-fluid">
+										<img src="{{ url_for('static', filename='images/return.svg') }}" alt="Image" class="imf-fluid">
 									</div>
-									<h3>Hassle Free Returns</h3>
-									<p>Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate.</p>
+									<h3>Pengembalian Tanpa Repot</h3>
+									<p>Proses pengembalian barang yang mudah dan cepat. Kepuasan Anda adalah prioritas utama kami.</p>
 								</div>
 							</div>
 
@@ -196,7 +189,7 @@
 
 					<div class="col-lg-5">
 						<div class="img-wrap">
-							<img src="images/why-choose-us-img.jpg" alt="Image" class="img-fluid">
+							<img src="{{ url_for('static', filename='images/gambar.jpeg') }}" alt="Image" class="img-fluid">
 						</div>
 					</div>
 
@@ -211,9 +204,9 @@
 				<div class="row justify-content-between">
 					<div class="col-lg-7 mb-5 mb-lg-0">
 						<div class="imgs-grid">
-							<div class="grid grid-1"><img src="images/img-grid-1.jpg" alt="Untree.co"></div>
-							<div class="grid grid-2"><img src="images/img-grid-2.jpg" alt="Untree.co"></div>
-							<div class="grid grid-3"><img src="images/img-grid-3.jpg" alt="Untree.co"></div>
+							<div class="grid grid-1"><img src="{{ url_for('static', filename='images/img-grid-1.jpg') }}" alt="Untree.co"></div>
+							<div class="grid grid-2"><img src="{{ url_for('static', filename='images/img-grid-2.jpg') }}" alt="Untree.co"></div>
+							<div class="grid grid-3"><img src="{{ url_for('static', filename='images/img-grid-3.jpg') }}" alt="Untree.co"></div>
 						</div>
 					</div>
 					<div class="col-lg-5 ps-lg-5">
@@ -232,55 +225,6 @@
 			</div>
 		</div>
 		<!-- End We Help Section -->
-
-		<!-- Start Popular Product -->
-		<div class="popular-product">
-			<div class="container">
-				<div class="row">
-
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-1.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Nordic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-2.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Kruzo Aero Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
-
-					<div class="col-12 col-md-6 col-lg-4 mb-4 mb-lg-0">
-						<div class="product-item-sm d-flex">
-							<div class="thumbnail">
-								<img src="images/product-3.png" alt="Image" class="img-fluid">
-							</div>
-							<div class="pt-3">
-								<h3>Ergonomic Chair</h3>
-								<p>Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio </p>
-								<p><a href="#">Read More</a></p>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-		<!-- End Popular Product -->
 
 		<!-- Start Testimonial Slider -->
 		<div class="testimonial-section">
@@ -396,7 +340,7 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-1.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{ url_for('static', filename='images/post-1.jpg') }}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">First Time Home Owner Ideas</a></h3>
 								<div class="meta">
@@ -408,7 +352,7 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-2.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{ url_for('static', filename='images/post-2.jpg') }}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">How To Keep Your Furniture Clean</a></h3>
 								<div class="meta">
@@ -420,7 +364,7 @@
 
 					<div class="col-12 col-sm-6 col-md-4 mb-4 mb-md-0">
 						<div class="post-entry">
-							<a href="#" class="post-thumbnail"><img src="images/post-3.jpg" alt="Image" class="img-fluid"></a>
+							<a href="#" class="post-thumbnail"><img src="{{ url_for('static', filename='images/post-3.jpg') }}" alt="Image" class="img-fluid"></a>
 							<div class="post-content-entry">
 								<h3><a href="#">Small Space Furniture Apartment Ideas</a></h3>
 								<div class="meta">
@@ -438,15 +382,10 @@
 		<!-- Start Footer Section -->
 		<footer class="footer-section">
 			<div class="container relative">
-
-				<div class="sofa-img">
-					<img src="images/sofa.png" alt="Image" class="img-fluid">
-				</div>
-
 				<div class="row">
 					<div class="col-lg-8">
 						<div class="subscription-form">
-							<h3 class="d-flex align-items-center"><span class="me-1"><img src="images/envelope-outline.svg" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
+							<h3 class="d-flex align-items-center"><span class="me-1"><img src="{{ url_for('static', filename='images/envelope-outline.svg') }}" alt="Image" class="img-fluid"></span><span>Subscribe to Newsletter</span></h3>
 
 							<form action="#" class="row g-3">
 								<div class="col-auto">
