@@ -7,8 +7,9 @@ app = Flask(__name__, static_folder='static')
    
 client = MongoClient("mongodb://localhost:27017/")
 db = client["olshop"]
+
 pelanggan_collection = db.pelanggan  # Koleksi pelanggan
-produk_collection = db.produk  # Koleksi pesanan
+product_collection = db['produk']
 pesanan_collection = db.pesanan  # Koleksi pesanan
 app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
 
@@ -33,7 +34,8 @@ def tambah_pelanggan():
 
 @app.route('/shop')
 def shop():
-    return render_template('shop.html')
+    produk = list(product_collection.find())
+    return render_template('shop.html', produk=produk)
 
 @app.route('/home')
 def home():
