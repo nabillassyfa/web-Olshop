@@ -1,0 +1,207 @@
+<!-- /*
+* Bootstrap 5
+* Template Name: Furni
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
+<!doctype html>
+<html lang="en">
+
+<!-- Mirrored from themewagon.github.io/furni/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:31:58 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="author" content="Untree.co">
+  <link rel="shortcut icon" href="favicon.png">
+
+  <meta name="description" content="" />
+  <meta name="keywords" content="bootstrap, bootstrap4" />
+
+		<!-- Bootstrap CSS -->
+		<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='assets/font-awesome/css/all.min.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='css/tiny-slider.css') }}" rel="stylesheet">
+		<link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+		<title>Fashion Admin</title>
+	</head>
+
+	<body>
+
+		<!-- Start Header/Navigation -->
+		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
+
+			<div class="container">
+				<a class="navbar-brand" href="{{ url_for('index') }}">noFashion<span>.</span></a>
+			
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+			
+				<div class="collapse navbar-collapse" id="navbarsFurni">
+					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
+						<li><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+						<li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
+						<li class="nav-item active"><a class="nav-link" href="{{ url_for('pelanggan') }}">Pelanggan</a></li>
+					</ul>
+				</div>
+			</div>			
+				
+		</nav>	
+		<div class="container mb-1 mt-5">
+			<h2 class="mb-4 section-title">Daftar pesanan.</h2>
+				<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tambahPelangganModal">Tambah Pelanggan</button>
+				<!-- Modal Tambah Pelanggan -->
+				<div class="modal fade" id="tambahPelangganModal" tabindex="-1" aria-labelledby="tambahPelangganModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title" id="tambahPelangganModalLabel">Tambah Pelanggan</h5>
+								<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+							</div>
+							<div class="modal-body">
+								<form action="{{ url_for('tambah_pelanggan') }}" method="POST">
+									<div class="mb-3">
+										<label for="username" class="form-label">Username</label>
+										<input type="text" class="form-control" id="username" name="username" required>
+									</div>
+									<div class="mb-3">
+										<label for="password" class="form-label">Password</label>
+										<input type="password" class="form-control" id="password" name="password" required>
+									</div>
+									<div class="mb-3">
+										<label for="nama" class="form-label">Nama</label>
+										<input type="text" class="form-control" id="nama" name="nama" required>
+									</div>
+									<div class="mb-3">
+										<label for="email" class="form-label">E-Mail</label>
+										<input type="email" class="form-control" id="email" name="email" required>
+									</div>
+									<div class="mb-3">
+										<label for="no_hp" class="form-label">No HP</label>
+										<input type="text" class="form-control" id="no_hp" name="no_hp" required>
+									</div>
+									<div class="mb-3">
+										<label for="alamat" class="form-label">Alamat</label>
+										<textarea class="form-control" id="alamat" name="alamat" rows="3" required></textarea>
+									</div>
+									<button type="submit" class="btn btn-primary">Tambah Pelanggan</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+		<!-- End Header/Navigation -->
+		<div class="product-section">
+			<div id="productTable">
+				<table class="table table-bordered">
+				<thead>
+					<tr>
+					<th>Username</th>
+					<th>Password</th>
+					<th>Nama</th>
+					<th>E-Mail</th>
+					<th>No HP</th>
+					<th>Alamat</th>
+					<th>Aksi</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for pelanggan in pelanggan %}
+					<tr>
+						<td>{{ pelanggan.username }}</td>
+						<td>{{ pelanggan.password }}</td>
+						<td>{{ pelanggan.nama }}</td>
+						<td>{{ pelanggan.email }}</td>
+						<td>{{ pelanggan.no_hp }}</td>
+						<td>{{ pelanggan.alamat }}</td>
+						<td>
+							<form action="{{ url_for('hapus_pelanggan', pelanggan_id=pelanggan['_id']) }}" method="POST" style="display: inline;">
+								<button type="submit" class="btn btn-primary">Hapus</button>
+							</form>
+							<button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updatePelangganModal{{ pelanggan['_id'] }}">Update</button>
+							<!-- Modal Tambah Pelanggan -->
+							<div class="modal fade" id="updatePelangganModal{{ pelanggan['_id'] }}" tabindex="-1" aria-labelledby="updatePelangganModalLabel" aria-hidden="true">
+								<div class="modal-dialog">
+									<div class="modal-content">
+										<div class="modal-header">
+											<h5 class="modal-title" id="updatePelangganModalLabel">Update Pelanggan</h5>
+											<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+										</div>
+										<div class="modal-body">
+											<form action="{{ url_for('update_pelanggan', pelanggan_id=pelanggan['_id']) }}" method="POST">
+												<div class="mb-3">
+													<label for="username" class="form-label">Username</label>
+													<input type="text" class="form-control" id="username" name="username" value="{{ pelanggan['username'] }}" required>
+												</div>
+												<div class="mb-3">
+													<label for="password" class="form-label">Password</label>
+													<input type="password" class="form-control" id="password" name="password" value="{{ pelanggan['password'] }}" required>
+												</div>
+												<div class="mb-3">
+													<label for="nama" class="form-label">Nama</label>
+													<input type="text" class="form-control" id="nama" name="nama" value="{{ pelanggan['nama'] }}" required>
+												</div>
+												<div class="mb-3">
+													<label for="email" class="form-label">E-Mail</label>
+													<input type="email" class="form-control" id="email" name="email" value="{{ pelanggan['email'] }}" required>
+												</div>
+												<div class="mb-3">
+													<label for="no_hp" class="form-label">No HP</label>
+													<input type="text" class="form-control" id="no_hp" name="no_hp" value="{{ pelanggan['no_hp'] }}" required>
+												</div>
+												<div class="mb-3">
+													<label for="alamat" class="form-label">Alamat</label>
+													<input class="form-control" id="alamat" name="alamat" rows="3" value="{{ pelanggan['alamat'] }}" required></input>
+												</div>
+												<button type="submit" class="btn btn-primary">Update Pelanggan</button>
+											</form>
+										</div>
+									</div>
+								</div>
+							</div>
+						</td>
+					</tr>
+					{% endfor %}
+				</tbody>
+				</table>
+			</div>  
+		</div>  
+		</div>
+		</div>  
+		<!-- Start Footer Section -->
+		<footer class="footer-section">
+			<div class="container relative">
+
+				<div class="border-top copyright">
+					<div class="row pt-4">
+						<div class="col-lg-6">
+							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co/">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a>  <!-- License information: https://untree.co/license/ -->
+            </p>
+						</div>
+
+						<div class="col-lg-6 text-center text-lg-end">
+							<ul class="list-unstyled d-inline-flex ms-auto">
+								<li class="me-4"><a href="#">Terms &amp; Conditions</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+							</ul>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</footer>
+		<!-- End Footer Section -->	
+
+
+		<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
+		<script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+
+	</body>
+
+
+<!-- Mirrored from themewagon.github.io/furni/ by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:32:06 GMT -->
+</html>

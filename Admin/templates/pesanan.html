@@ -33,7 +33,7 @@
 		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
-				<a class="navbar-brand" href="{{ url_for('index') }}">Fashion<span>.</span></a>
+				<a class="navbar-brand" href="{{ url_for('index') }}">noFashion<span>.</span></a>
 			
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -43,16 +43,44 @@
 					<ul class="custom-navbar-nav navbar-nav ms-auto mb-2 mb-md-0">
 						<li><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
 						<li class="nav-item active"><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
+						<li><a class="nav-link" href="{{ url_for('pelanggan') }}">Pelanggan</a></li>
 					</ul>
 				</div>
 			</div>			
 				
-		</nav>
+		</nav>		
 		<!-- End Header/Navigation -->
-
+		<div class="container mb-1 mt-5">
+			<h2 class="mb-4 section-title">Daftar pesanan.</h2>
+			<div class="row mb-4">
+				<div class="col-md-3">
+					<div class="card bg-light p-3">
+						<h5>Total Pesanan</h5>
+						<p>{{ total_orders }}</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card bg-light p-3">
+						<h5>Pesanan Selesai</h5>
+						<p>{{ completed_orders }}</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card bg-light p-3">
+						<h5>Pesanan Dalam Proses</h5>
+						<p>{{ non_completed_orders }}</p>
+					</div>
+				</div>
+				<div class="col-md-3">
+					<div class="card bg-light p-3">
+						<h5>Total Pendapatan</h5>
+						<p>Rp{{ "{:,.0f}".format(total_revenue) }}</p>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="product-section">
 			<div class="container">
-			<h2 class="mb-4 section-title">Daftar pesanan.</h2>
 			<div class="d-flex justify-content-between align-items-center mb-4">
 				<!-- Filter Buttons on the Left -->
 				<div>
@@ -109,7 +137,7 @@
 										</div>
 										<div class="modal-body">
 											<form action="{{ url_for('update_pesanan', pesanan_id=pesanan['_id']) }}" method="POST">
-													<input type="hidden" class="form-control" id="status" name="status" value="Selesai" required>
+													<input type="hidden" class="form-control" id="status" name="status" value="selesai" required>
 												<center><button type="submit" class="btn btn-primary">Selesai</button></center>
 											</form>
 										</div>

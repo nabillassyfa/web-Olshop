@@ -30,7 +30,7 @@
   <!-- Start Header/Navigation -->
   <nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
     <div class="container">
-      <a class="navbar-brand" href="{{ url_for('index') }}">Fashion<span>.</span></a>
+      <a class="navbar-brand" href="{{ url_for('index') }}">noFashion<span>.</span></a>
 
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni"
         aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,7 @@
             <a class="nav-link" href="{{ url_for('index') }}">Home</a>
           </li>
           <li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
+          <li><a class="nav-link" href="{{ url_for('pelanggan') }}">Pelanggan</a></li>
         </ul>
       </div>
     </div>
@@ -59,50 +60,50 @@
            <button onclick="toggleView('list')" class="btn btn-primary">Card View</button>
            <button onclick="toggleView('table')" class="btn btn-primary">Table View</button>
            <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#tambahProdukModal">Tambah Produk</button>
-		  <!-- Modal Tambah Produk -->
-		  <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-			  <div class="modal-content">
-				<div class="modal-header">
-				  <h5 class="modal-title" id="tambahProdukModalLabel">Tambah Produk</h5>
-				  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-				  <form action="{{ url_for('tambah_produk') }}" method="POST">
-					<div class="mb-3">
-					  <label for="nama" class="form-label">Nama Produk</label>
-					  <input type="text" class="form-control" id="nama" name="nama" required>
-					</div>
-					<div class="mb-3">
-					  <label for="kategori" class="form-label">Kategori</label>
-					  <input type="text" class="form-control" id="kategori" name="kategori" required>
-					</div>
-					<div class="mb-3">
-					  <label for="stok" class="form-label">Stok</label>
-					  <input type="number" class="form-control" id="stok" name="stok" required>
-					</div>
-					<div class="mb-3">
-					  <label for="stok" class="form-label">Deskripsi</label>
-					  <input type="text" class="form-control" id="deskripsi" name="deskripsi" required>
-					</div>
-					<div class="mb-3">
-					  <label for="rating" class="form-label">Rating</label>
-					  <input type="number" step="0.1" class="form-control" id="rating" name="rating" required>
-					</div>
-					<div class="mb-3">
-					  <label for="harga" class="form-label">Harga</label>
-					  <input type="number" class="form-control" id="harga" name="harga" required>
-					</div>
-					<div class="mb-3">
-					  <label for="gambar" class="form-label">URL Gambar</label>
-					  <input type="text" class="form-control" id="gambar" name="gambar" required>
-					</div>
-					<button type="submit" class="btn btn-primary">Tambah Produk</button>
-				  </form>
-				</div>
-			  </div>
-			</div>
-		  </div>
+          <!-- Modal Tambah Produk -->
+          <div class="modal fade" id="tambahProdukModal" tabindex="-1" aria-labelledby="tambahProdukModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="tambahProdukModalLabel">Tambah Produk</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <form action="{{ url_for('tambah_produk') }}" method="POST">
+                <div class="mb-3">
+                  <label for="nama" class="form-label">Nama Produk</label>
+                  <input type="text" class="form-control" id="nama" name="nama" required>
+                </div>
+                <div class="mb-3">
+                  <label for="kategori" class="form-label">Kategori</label>
+                  <input type="text" class="form-control" id="kategori" name="kategori" required>
+                </div>
+                <div class="mb-3">
+                  <label for="stok" class="form-label">Stok</label>
+                  <input type="number" class="form-control" id="stok" name="stok" required>
+                </div>
+                <div class="mb-3">
+                  <label for="stok" class="form-label">Deskripsi</label>
+                  <input type="text" class="form-control" id="deskripsi" name="deskripsi" required>
+                </div>
+                <div class="mb-3">
+                  <label for="rating" class="form-label">Rating</label>
+                  <input type="number" step="0.1" class="form-control" id="rating" name="rating" required>
+                </div>
+                <div class="mb-3">
+                  <label for="harga" class="form-label">Harga</label>
+                  <input type="number" class="form-control" id="harga" name="harga" required>
+                </div>
+                <div class="mb-3">
+                  <label for="gambar" class="form-label">URL Gambar</label>
+                  <input type="text" class="form-control" id="gambar" name="gambar" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Tambah Produk</button>
+                </form>
+              </div>
+              </div>
+            </div>
+          </div>
 		
 		  <!-- Flash Message Display -->
 		  {% with messages = get_flashed_messages() %}

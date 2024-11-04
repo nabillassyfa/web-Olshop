@@ -1,5 +1,6 @@
 from flask import Flask, redirect, render_template, url_for, request, flash, jsonify
 from pymongo import MongoClient
+from bson.json_util import dumps
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -18,6 +19,11 @@ def index():
     
     return render_template('index.html', produk=produk, sort_order=sort_order)
 
+@app.route('/pelanggan')
+def pelanggan():
+    pelanggan = list(pelanggan_collection.find())
+    return render_template('pelanggan.html', pelanggan=pelanggan)
+
 
 @app.route('/pesanan')
 def pesanan():
@@ -25,11 +31,21 @@ def pesanan():
     sort_direction = 1 if sort_order == 'asc' else -1
     status_filter = request.args.get('status_filter')
 
+    # filter tabel selesai dan proses
     filter_query = {}
     if status_filter == 'selesai':
-        filter_query["status"] = "Selesai"
+        filter_query["status"] = "selesai"
     elif status_filter == 'non-selesai':
-        filter_query["status"] = {"$ne": "Selesai"}
+        filter_query["status"] = {"$ne": "selesai"}
+
+    # beberapa agregasi
+    total_orders = pesanan_collection.count_documents({})
+    completed_orders = pesanan_collection.count_documents({"status": "selesai"})
+    non_completed_orders = total_orders - completed_orders
+    total_revenue = pesanan_collection.aggregate([
+        {"$group": {"_id": None, "total_revenue": {"$sum": "$jumlah_harga_pesanan"}}}
+    ])
+    total_revenue = next(total_revenue, {}).get("total_revenue", 0)
 
     pesanan = pesanan_collection.find(filter_query).sort("jumlah_harga_pesanan", sort_direction)
     
@@ -49,7 +65,7 @@ def pesanan():
             "order_date": order["order_date"]
         })
 
-    return render_template('pesanan.html', pesanan=enriched_pesanan, sort_order=sort_order, status_filter=status_filter)
+    return render_template('pesanan.html', pesanan=enriched_pesanan, sort_order=sort_order, status_filter=status_filter, total_orders=total_orders, completed_orders=completed_orders, non_completed_orders=non_completed_orders, total_revenue=total_revenue)
 
 
 
@@ -93,6 +109,43 @@ def tambah_produk():
 
     return redirect(url_for('index'))
 
+@app.route('/tambah_pelanggan', methods=['POST'])
+def tambah_pelanggan():
+    username = request.form.get('username')
+    password = request.form.get('password')
+    nama = request.form.get('nama')
+    email = request.form.get('email')
+    no_hp = request.form.get('no_hp')
+    alamat = request.form.get('alamat')
+
+    if not all([username, password, nama, email, no_hp, alamat]):
+        flash('Semua field harus diisi!')
+        return redirect(url_for('index'))
+
+    last_customer = pelanggan_collection.find_one(sort=[("_id", -1)])
+    if last_customer and "_id" in last_customer:
+        # Increment the largest `_id`
+        new__id = str(int(last_customer["_id"]) + 1)
+    else:
+        new__id = "1"  
+
+    # New customer data
+    pelanggan_baru = {
+        '_id': new__id,
+        'username': username,
+        'password': password, 
+        'nama': nama,
+        'email': email,
+        'no_hp': no_hp,
+        'alamat': alamat
+    }
+
+    # Insert new customer into the database
+    pelanggan_collection.insert_one(pelanggan_baru)
+    flash('Pelanggan berhasil ditambahkan!')
+
+    return redirect(url_for('pelanggan'))
+
 @app.route('/hapus_produk/<produk_id>', methods=['POST'])
 def hapus_produk(produk_id):
     product_collection.delete_one({'_id': produk_id})
@@ -103,7 +156,40 @@ def hapus_produk(produk_id):
 def hapus_pesanan(pesanan_id):
     pesanan_collection.delete_one({'_id': pesanan_id})
     flash('Pesanan berhasil dihapus!')
-    return redirect(url_for('index'))
+    return redirect(url_for('pesanan'))
+
+@app.route('/hapus_pelanggan/<pelanggan_id>', methods=['POST'])
+def hapus_pelanggan(pelanggan_id):
+    pelanggan_collection.delete_one({'_id': pelanggan_id})
+    flash('Pelanggan berhasil dihapus!')
+    return redirect(url_for('pelanggan'))
+
+@app.route('/update_pelanggan/<pelanggan_id>', methods=['POST'])
+def update_pelanggan(pelanggan_id):
+    username = request.form.get('username')
+    password = request.form.get('password')
+    nama = request.form.get('nama')
+    email = request.form.get('email')
+    no_hp = request.form.get('no_hp')
+    alamat = request.form.get('alamat')
+
+    if not all([username, password, nama, email, no_hp, alamat]):
+        flash('Semua field harus diisi!')
+        return redirect(url_for('pelanggan'))
+    
+    updated_pelanggan = {
+        'username': username,
+        'password': password, 
+        'nama': nama,
+        'email': email,
+        'no_hp': no_hp,
+        'alamat': alamat
+    }
+
+    pelanggan_collection.update_one({'_id': pelanggan_id}, {'$set': updated_pelanggan})
+    flash('Pelanggan berhasil diperbarui!')
+
+    return redirect(url_for('pelanggan'))
 
 @app.route('/update_produk/<produk_id>', methods=['POST'])
 def update_produk(produk_id):
