@@ -48,12 +48,12 @@
 						<li><a class="nav-link" href="{{ url_for('daftar_pesanan', id_pembeli=id_pembeli) }}">Pesanan</a></li>
 						<li><a class="nav-link" href="{{ url_for('about') }}">About us</a></li>
 						<li><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
-						<li><a class="nav-link" href="{{ url_for('blog') }}">Blog</a></li>
+						<li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
 						<li><a class="nav-link" href="{{ url_for('contact') }}">Contact us</a></li>
 					</ul>
 			
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="#"><img src="{{ url_for('static', filename='images/user.svg') }}"></a></li>
+						<li><a class="nav-link" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='images/user.svg') }}"></a></li>
 						<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
 					</ul>
 				</div>
@@ -87,17 +87,18 @@
 		      	<div class="row">
 				{% for produk in produk %}
 		      		<!-- Start Column 1 -->
-					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
-						<a class="product-item" href="#">
-							<img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail">
-							<h3 class="product-title">{{produk.nama}}</h3>
-							<strong class="product-price">Rp{{"{:,.0f}".format(produk.harga)}}</strong>
-
-							<span class="icon-cross">
-								<img src="{{ url_for('static', filename='images/cross.svg') }}" class="img-fluid">
-							</span>
-						</a>
-					</div> 
+					  <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
+						<form action="{{ url_for('add_to_cart', id_produk=produk['_id']) }}" method="POST">
+							<div class="product-item">
+								<img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail">
+								<h3 class="product-title">{{ produk['nama'] }}</h3>
+								<strong class="product-price">Rp{{ "{:,.0f}".format(produk['harga']) }}</strong>
+								<span class="icon-cross">
+									<input type="image" src="{{ url_for('static', filename='images/cross.svg') }}" class="img-fluid mt-2" alt="Tambah ke Keranjang">
+								</span>
+							</div>
+						</form>
+					</div>					
 					{% endfor %}
 					<!-- End Column 1 -->
 		      	</div>
