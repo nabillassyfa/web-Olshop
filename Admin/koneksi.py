@@ -7,6 +7,8 @@ app.secret_key = 'your_secret_key'
 client = MongoClient('mongodb://localhost:27017/')
 db = client['olshop']
 product_collection = db['produk']
+pesanan_collection = db['pesanan']
+pelanggan_collection = db['pelanggan']
 
 @app.route('/')
 def index():
@@ -15,7 +17,29 @@ def index():
 
 @app.route('/pesanan')
 def pesanan():
-    return render_template('pesanan.html')
+    pesanan = pesanan_collection.find()
+    enriched_pesanan = []
+
+    for pesanan in pesanan:
+
+        product = product_collection.find_one({"_id": pesanan["id_produk"]})
+        product_name = product["nama"] if product else "Unknown"
+
+        pelanggan = pelanggan_collection.find_one({"_id": pesanan['id_pelanggan']})
+        pelanggan_name = pelanggan["nama"] if pelanggan else "Unknown"
+
+        enriched_pesanan.append({
+            "_id": pesanan["_id"],
+            "status": pesanan["status"],
+            "alamat_pengiriman": pesanan["alamat_pengiriman"],
+            "metode_pembayaran": pesanan["metode_pembayaran"],
+            "jumlah_harga_pesanan": pesanan["jumlah_harga_pesanan"],
+            "product_name": product_name,
+            "pelanggan_name": pelanggan_name,
+            "order_date": pesanan["order_date"]
+        })
+
+    return render_template('pesanan.html', pesanan=enriched_pesanan)
 
 @app.route('/tambah_produk', methods=['POST'])
 def tambah_produk():
@@ -63,6 +87,12 @@ def hapus_produk(produk_id):
     flash('Produk berhasil dihapus!')
     return redirect(url_for('index'))
 
+@app.route('/hapus_pesanan/<pesanan_id>', methods=['POST'])
+def hapus_pesanan(pesanan_id):
+    pesanan_collection.delete_one({'_id': pesanan_id})
+    flash('Pesanan berhasil dihapus!')
+    return redirect(url_for('index'))
+
 @app.route('/update_produk/<produk_id>', methods=['POST'])
 def update_produk(produk_id):
     nama = request.form.get('nama')
@@ -93,6 +123,25 @@ def update_produk(produk_id):
     flash('Produk berhasil diperbarui!')
 
     return redirect(url_for('index'))
+
+@app.route('/update_pesanan/<pesanan_id>', methods=['POST'])
+def update_pesanan(pesanan_id):
+    status = request.form.get('status')
+
+    if not all([status]):
+        flash('Semua field harus diisi!')
+        return redirect(url_for('index'))
+
+    # Data produk yang akan diperbarui
+    updated_produk = {
+        'status': status
+    }
+
+    # Update produk dalam database
+    pesanan_collection.update_one({'_id': pesanan_id}, {'$set': updated_produk})
+    flash('Produk selesai!')
+
+    return redirect(url_for('pesanan'))
 
 
 if __name__ == '__main__':
