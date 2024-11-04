@@ -1,6 +1,15 @@
+<!-- /*
+* Bootstrap 5
+* Template Name: Furni
+* Template Author: Untree.co
+* Template URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/ -->
 <!doctype html>
 <html lang="en">
 
+<!-- Mirrored from themewagon.github.io/furni/blog.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:32:09 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -37,8 +46,8 @@
 						<li><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
 						<li><a class="nav-link" href="{{ url_for('shop') }}">Shop</a></li>
 						<li><a class="nav-link" href="{{ url_for('about') }}">About us</a></li>
-						<li class="nav-item active"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
-						<li><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
+						<li><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
+						<li class="nav-item active"><a class="nav-link" href="{{ url_for('pesanan') }}">Pesanan</a></li>
 						<li><a class="nav-link" href="{{ url_for('contact') }}">Contact us</a></li>
 					</ul>
 			
@@ -47,9 +56,7 @@
 						<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
 					</ul>
 				</div>
-			</div>
-			
-				
+			</div>			
 		</nav>
 		<!-- End Header/Navigation -->
 
@@ -59,14 +66,14 @@
 					<div class="row justify-content-between">
 						<div class="col-lg-5">
 							<div class="intro-excerpt">
-								<h1>Services</h1>
+								<h1>Riwayat Pesanan</h1>
 								<p class="mb-4">Donec vitae odio quis nisl dapibus malesuada. Nullam ac aliquet velit. Aliquam vulputate velit imperdiet dolor tempor tristique.</p>
 								<p><a href="#" class="btn btn-secondary me-2">Shop Now</a><a href="#" class="btn btn-white-outline">Explore</a></p>
 							</div>
 						</div>
 						<div class="col-lg-7">
 							<div class="hero-img-wrap">
-								<img src="{{ url_for('static', filename='images/couch.png') }}" class="img-fluid">
+								<img src="{{ url_for('static', filename='images/model.png') }}" class="img-fluid">
 							</div>
 						</div>
 					</div>
@@ -76,70 +83,46 @@
 
 		
 
-		<!-- Start Why Choose Us Section -->
-		<div class="why-choose-section">
+		<!-- Start Blog Section -->
+		<div class="blog-section">
 			<div class="container">
-				<div class="row justify-content-between">
-					<div class="col-lg-6">
-						<h2 class="section-title">Mengapa Memilih Kami</h2>
-						<p>Nikmati layanan kami yang penuh kenyamanan. Dapatkan pengalaman berbelanja yang mudah dan menguntungkan dengan kualitas layanan terbaik.</p>
-
-						<div class="row my-5">
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="{{ url_for('static', filename='images/truck.svg') }}" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Pengiriman Cepat & Gratis</h3>
-									<p>Nikmati pengiriman cepat dan gratis. Layanan kami membuat produk pilihan Anda tiba tepat waktu dan tanpa biaya tambahan.</p>
-								</div>
-							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="{{ url_for('static', filename='images/bag.svg') }}" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Mudah untuk Berbelanja</h3>
-									<p>Dengan sistem yang ramah pengguna, proses belanja jadi lebih mudah dan menyenangkan, kapan saja dan di mana saja.</p>
-								</div>
-							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="{{ url_for('static', filename='images/support.svg') }}" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Dukungan 24/7</h3>
-									<p>Layanan pelanggan kami siap membantu Anda selama 24 jam setiap hari, kapan pun Anda butuhkan.</p>
-								</div>
-							</div>
-
-							<div class="col-6 col-md-6">
-								<div class="feature">
-									<div class="icon">
-										<img src="{{ url_for('static', filename='images/return.svg') }}" alt="Image" class="imf-fluid">
-									</div>
-									<h3>Pengembalian Tanpa Repot</h3>
-									<p>Proses pengembalian barang yang mudah dan cepat. Kepuasan Anda adalah prioritas utama kami.</p>
-								</div>
-							</div>
-
-						</div>
-					</div>
-
-					<div class="col-lg-5">
-						<div class="img-wrap">
-							<img src="{{ url_for('static', filename='images/gambar.jpeg') }}" alt="Image" class="img-fluid">
-						</div>
-					</div>
-
+				
+				<div class="container">
+					<h2 class="h3 mb-4 text-black">Order History</h2>
+					<table class="table">
+						<thead>
+							<tr>
+								<th>Order ID</th>
+								<th>Product</th>
+								<th>Order Date</th>
+								<th>Status</th>
+								<th>Total Price</th>
+								<th>Delivery Address</th>
+								<th>Payment Method</th>
+							</tr>
+						</thead>
+						<tbody>
+							{% for order in orders %}
+							<tr>
+								<td>{{ order._id }}</td>
+								<td>{{ order.product_name }}</td>
+								<td>{{ order.order_date }}</td>
+								<td>{{ order.status }}</td>
+								<td>Rp{{ order.jumlah_harga_pesanan }}</td>
+								<td>{{ order.alamat_pengiriman }}</td>
+								<td>{{ order.metode_pembayaran }}</td>
+							</tr>
+							{% else %}
+							<tr>
+								<td colspan="8" class="text-center">No orders found.</td>
+							</tr>
+							{% endfor %}
+						</tbody>
+					</table>
 				</div>
-			</div>
+				
 		</div>
-		<!-- End Why Choose Us Section -->
-
-
+		<!-- End Blog Section -->	
 
 		<!-- Start Footer Section -->
 		<footer class="footer-section">
@@ -224,7 +207,7 @@
 					<div class="row pt-4">
 						<div class="col-lg-6">
 							<p class="mb-2 text-center text-lg-start">Copyright &copy;<script>document.write(new Date().getFullYear());</script>. All Rights Reserved. &mdash; Designed with love by <a href="https://untree.co/">Untree.co</a> Distributed By <a hreff="https://themewagon.com">ThemeWagon</a> <!-- License information: https://untree.co/license/ -->
-            </p>
+			</p>
 						</div>
 
 						<div class="col-lg-6 text-center text-lg-end">
@@ -248,5 +231,5 @@
 	</body>
 
 
-<!-- Mirrored from themewagon.github.io/furni/services.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:32:09 GMT -->
+<!-- Mirrored from themewagon.github.io/furni/blog.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 03 Nov 2024 13:32:09 GMT -->
 </html>
