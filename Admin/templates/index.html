@@ -160,10 +160,57 @@
 				<td>{{ produk.rating }}</td>
 				<td>Rp{{ "{:,.0f}".format(produk.harga) }}</td>
 				<td>
-					<form action="{{ url_for('hapus_produk', produk_id=produk['_id']) }}" method="POST" style="display: inline;">
-					<button type="submit" class="btn btn-danger">Hapus</button>
-					</form>
-				</td>
+          <form action="{{ url_for('hapus_produk', produk_id=produk['_id']) }}" method="POST" style="display: inline;">
+              <button type="submit" class="btn btn-primary">Hapus</button>
+          </form>
+          <!-- Update Button -->
+          <button class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#updateProdukModal{{ produk['_id'] }}">Update</button>
+      
+          <!-- Update Modal -->
+          <div class="modal fade" id="updateProdukModal{{ produk['_id'] }}" tabindex="-1" aria-labelledby="updateProdukModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                  <div class="modal-content">
+                      <div class="modal-header">
+                          <h5 class="modal-title" id="updateProdukModalLabel">Update Produk</h5>
+                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                      </div>
+                      <div class="modal-body">
+                          <form action="{{ url_for('update_produk', produk_id=produk['_id']) }}" method="POST">
+                              <div class="mb-3">
+                                  <label for="nama" class="form-label">Nama Produk</label>
+                                  <input type="text" class="form-control" id="nama" name="nama" value="{{ produk['nama'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="kategori" class="form-label">Kategori</label>
+                                  <input type="text" class="form-control" id="kategori" name="kategori" value="{{ produk['kategori'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="stok" class="form-label">Stok</label>
+                                  <input type="number" class="form-control" id="stok" name="stok" value="{{ produk['stok'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="deskripsi" class="form-label">Deskripsi</label>
+                                  <input type="text" class="form-control" id="deskripsi" name="deskripsi" value="{{ produk['deskripsi'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="rating" class="form-label">Rating</label>
+                                  <input type="number" step="0.1" class="form-control" id="rating" name="rating" value="{{ produk['rating'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="harga" class="form-label">Harga</label>
+                                  <input type="number" class="form-control" id="harga" name="harga" value="{{ produk['harga'] }}" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="gambar" class="form-label">URL Gambar</label>
+                                  <input type="text" class="form-control" id="gambar" name="gambar" value="{{ produk['gambar'] }}" required>
+                              </div>
+                              <button type="submit" class="btn btn-primary">Update Produk</button>
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </td>
 				</tr>
 				{% endfor %}
 			</tbody>
