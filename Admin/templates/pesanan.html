@@ -53,7 +53,22 @@
 		<div class="product-section">
 			<div class="container">
 			<h2 class="mb-4 section-title">Daftar pesanan.</h2>
-	
+			<div class="d-flex justify-content-between align-items-center mb-4">
+				<!-- Filter Buttons on the Left -->
+				<div>
+					<button onclick="filterStatus('selesai')" class="btn btn-primary me-2">Selesai</button>
+					<button onclick="filterStatus('non-selesai')" class="btn btn-secondary">Proses</button>
+				</div>
+			
+				<!-- Sorting Dropdown on the Right -->
+				<div class="d-flex align-items-center">
+					<label for="sortDropdown" class="me-2">Sort by Harga:</label>
+					<select id="sortDropdown" class="form-select w-auto" onchange="sortOrders()">
+						<option value="asc" {% if sort_order == 'asc' %}selected{% endif %}>Ascending</option>
+						<option value="desc" {% if sort_order == 'desc' %}selected{% endif %}>Descending</option>
+					</select>
+				</div>
+			</div>
 		  <!-- Table View -->
 			<div id="productTable">
 				<table class="table table-bordered">
@@ -78,7 +93,7 @@
 						<td>{{ pesanan.alamat_pengiriman }}</td>
 						<td>Rp{{ "{:,.0f}".format(pesanan.jumlah_harga_pesanan) }}</td>
 						<td>{{ pesanan.metode_pembayaran }}</td>
-						<td>{{ pesanan.order_date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+						<td>{{ pesanan.order_date }}</td>
 						<td>
 							<form action="{{ url_for('hapus_pesanan', pesanan_id=pesanan['_id']) }}" method="POST" style="display: inline;">
 								<button type="submit" class="btn btn-primary">Hapus</button>
@@ -138,6 +153,18 @@
 		<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/tiny-slider.js') }}"></script>
 		<script src="{{ url_for('static', filename='js/custom.js') }}"></script>
+		<script>
+			function sortOrders() {
+				const sortOrder = document.getElementById("sortDropdown").value;
+				const statusFilter = new URLSearchParams(window.location.search).get("status_filter") || '';
+				window.location.href = `{{ url_for('pesanan') }}?sort=${sortOrder}&status_filter=${statusFilter}`;
+			}
+		
+			function filterStatus(status) {
+				const sortOrder = new URLSearchParams(window.location.search).get("sort") || 'asc';
+				window.location.href = `{{ url_for('pesanan') }}?sort=${sortOrder}&status_filter=${status}`;
+			}
+		</script>
 
 	</body>
 

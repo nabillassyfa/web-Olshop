@@ -12,34 +12,46 @@ pelanggan_collection = db['pelanggan']
 
 @app.route('/')
 def index():
-    produk = list(product_collection.find())
-    return render_template('index.html', produk=produk)
+    sort_order = request.args.get('sort', 'asc')
+    sort_direction = 1 if sort_order == 'asc' else -1
+    produk = list(product_collection.find().sort("stok", sort_direction))
+    
+    return render_template('index.html', produk=produk, sort_order=sort_order)
+
 
 @app.route('/pesanan')
 def pesanan():
-    pesanan = pesanan_collection.find()
+    sort_order = request.args.get('sort', 'asc')
+    sort_direction = 1 if sort_order == 'asc' else -1
+    status_filter = request.args.get('status_filter')
+
+    filter_query = {}
+    if status_filter == 'selesai':
+        filter_query["status"] = "Selesai"
+    elif status_filter == 'non-selesai':
+        filter_query["status"] = {"$ne": "Selesai"}
+
+    pesanan = pesanan_collection.find(filter_query).sort("jumlah_harga_pesanan", sort_direction)
+    
     enriched_pesanan = []
-
-    for pesanan in pesanan:
-
-        product = product_collection.find_one({"_id": pesanan["id_produk"]})
-        product_name = product["nama"] if product else "Unknown"
-
-        pelanggan = pelanggan_collection.find_one({"_id": pesanan['id_pelanggan']})
-        pelanggan_name = pelanggan["nama"] if pelanggan else "Unknown"
-
+    for order in pesanan:
+        product = product_collection.find_one({"_id": order["id_produk"]})
+        pelanggan = pelanggan_collection.find_one({"_id": order["id_pelanggan"]})
+        
         enriched_pesanan.append({
-            "_id": pesanan["_id"],
-            "status": pesanan["status"],
-            "alamat_pengiriman": pesanan["alamat_pengiriman"],
-            "metode_pembayaran": pesanan["metode_pembayaran"],
-            "jumlah_harga_pesanan": pesanan["jumlah_harga_pesanan"],
-            "product_name": product_name,
-            "pelanggan_name": pelanggan_name,
-            "order_date": pesanan["order_date"]
+            "_id": order["_id"],
+            "status": order["status"],
+            "alamat_pengiriman": order["alamat_pengiriman"],
+            "metode_pembayaran": order["metode_pembayaran"],
+            "jumlah_harga_pesanan": order["jumlah_harga_pesanan"],
+            "product_name": product["nama"] if product else "Unknown",
+            "pelanggan_name": pelanggan["nama"] if pelanggan else "Unknown",
+            "order_date": order["order_date"]
         })
 
-    return render_template('pesanan.html', pesanan=enriched_pesanan)
+    return render_template('pesanan.html', pesanan=enriched_pesanan, sort_order=sort_order, status_filter=status_filter)
+
+
 
 @app.route('/tambah_produk', methods=['POST'])
 def tambah_produk():
