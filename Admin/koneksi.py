@@ -63,5 +63,37 @@ def hapus_produk(produk_id):
     flash('Produk berhasil dihapus!')
     return redirect(url_for('index'))
 
+@app.route('/update_produk/<produk_id>', methods=['POST'])
+def update_produk(produk_id):
+    nama = request.form.get('nama')
+    kategori = request.form.get('kategori')
+    deskripsi = request.form.get('deskripsi')
+    stok = request.form.get('stok', type=int)
+    rating = request.form.get('rating', type=float)
+    harga = request.form.get('harga', type=int)
+    gambar = request.form.get('gambar')
+
+    if not all([nama, kategori, stok, rating, harga]):
+        flash('Semua field harus diisi!')
+        return redirect(url_for('index'))
+
+    # Data produk yang akan diperbarui
+    updated_produk = {
+        'nama': nama,
+        'kategori': kategori,
+        'deskripsi': deskripsi,
+        'stok': stok,
+        'rating': rating,
+        'harga': harga,
+        'gambar': gambar
+    }
+
+    # Update produk dalam database
+    product_collection.update_one({'_id': produk_id}, {'$set': updated_produk})
+    flash('Produk berhasil diperbarui!')
+
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':
     app.run(debug=True)
