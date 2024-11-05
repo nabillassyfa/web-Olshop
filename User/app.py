@@ -231,23 +231,27 @@ def pesanan():
 def add_to_cart(id_produk):
     id_produk = str(id_produk)
     produk = product_collection.find_one({'_id': id_produk})  
-
     if produk:
         if 'cart' not in session:
             session['cart'] = []
+
+       
+        cart = session['cart']
         
-        item_in_cart = next((item for item in session['cart'] if item['id_produk'] == id_produk), None)
-        
+        item_in_cart = next((item for item in cart if item['id_produk'] == id_produk), None)
+
         if item_in_cart:
             item_in_cart['jumlah'] += 1
         else:
-            session['cart'].append({
+            cart.append({
                 'id_produk': id_produk,
-                'nama_produk': produk['nama'],  
+                'nama_produk': produk['nama'],
                 'harga': produk['harga'],
                 'jumlah': 1,
-                'gambar': produk['gambar']  
+                'gambar': produk['gambar']
             })
+        session['cart'] = cart
+        session.modified = True  
     else:
         print("Produk tidak ditemukan")
 
@@ -270,26 +274,47 @@ def place_order():
         flash("Please log in to place an order.", "warning")
         return redirect(url_for('login'))
 
-    # Ambil data dari formulir
-    product_id = request.form['product_id']
-    quantity = int(request.form['quantity'])
     delivery_address = request.form['delivery_address']
     payment_method = request.form['payment_method']
 
-    # Buat data pesanan
-    order_data = {
-        'id_pelanggan': customer_id,
-        'id_produk': product_id,
-        'order_date': datetime.datetime.now().strftime('%Y-%m-%d'),  
-        'status': 'Pending', 
-        'jumlah_harga_pesanan': quantity * get_product_price(product_id),  
-        'alamat_pengiriman': delivery_address,
-        'metode_pembayaran': payment_method
-    }
+    cart_items = session.get('cart', [])
+    
+    if not cart_items:
+        flash("Keranjang belanja kosong.", "warning")
+        return redirect(url_for('cart'))
 
-    pesanan_collection.insert_one(order_data)
+    for item in cart_items:
+        product_id = item['id_produk']
+        quantity = item['jumlah'] 
+        
+        last_order = pesanan_collection.find_one(sort=[("_id", -1)])
+        if last_order and '_id' in last_order:
+            new_order_id = str(int(last_order['_id']) + 1)
+        else:
+            new_order_id = "1"  
+            
+        order_data = {
+            '_id': new_order_id,
+            'id_pelanggan': customer_id,
+            'id_produk': product_id,
+            'order_date': datetime.datetime.now().strftime('%Y-%m-%d'),
+            'status': 'Pending',
+            'jumlah_harga_pesanan': quantity * get_product_price(product_id),
+            'alamat_pengiriman': delivery_address,
+            'metode_pembayaran': payment_method
+        }
 
+        
+        try:
+            pesanan_collection.insert_one(order_data)
+        except pymongo.errors.DuplicateKeyError:
+            flash("Pesanan gagal dibuat, ID sudah ada.", "danger")
+            return redirect(url_for('checkout'))
+
+    
+    session.pop('cart', None)  # Menghapus 'cart' dari sesi
     return redirect(url_for('thankyou'))
+
 
 def get_product_price(product_id):
     product = product_collection.find_one({'_id':(product_id)})

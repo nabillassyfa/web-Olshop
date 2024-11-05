@@ -227,12 +227,14 @@
 							</div>
 						</div>
 					</div>
-					{% for order in order_details %}
+					
 					<form method="POST" action="{{ url_for('place_order') }}">
+						{% for order in order_details %}
 						<input type="hidden" name="product_id" value="{{ order.product_id }}"> <!-- ID produk -->
 						<input type="hidden" name="customer_id" value="{{ customer._id }}"> <!-- ID pelanggan -->
 						<input type="hidden" name="quantity" value="{{ order.quantity }}" required> <!-- Jumlah -->
 						<input type="hidden" name="delivery_address" value="Bandung, Indonesia"> <!-- Alamat pengiriman -->
+						{% endfor %}
 						<div class="border p-3 mb-3">
 							<h3 class="h6 mb-0"><a class="d-block" data-bs-toggle="collapse" href="#collapsebank" role="button" aria-expanded="false" aria-controls="collapsebank">Metode Pembayaran</a></h3>
 							<div class="collapse" id="collapsebank">
@@ -247,7 +249,7 @@
 						</div>
 						<button type="submit" class="btn btn-black btn-lg py-3 btn-block">Place Order</button>
 					</form>
-				{% endfor %}
+				
 		                
 		              </div>
 		            </div>
