@@ -125,8 +125,14 @@ def daftar():
         email = request.form['email']
         no_hp = request.form['no_hp']
 
-        # Simpan user di database
+        last_pelanggan = pelanggan_collection.find_one(sort=[("_id", -1)])
+        if last_pelanggan and '_id' in last_pelanggan:
+            new_id = str(int(last_pelanggan['_id']) + 1)
+        else:
+            new_id = "1" 
+            
         pelanggan_data = {
+            "_id": new_id,  
             "nama": nama,
             "username": username,
             "password": password,
@@ -136,7 +142,7 @@ def daftar():
         pelanggan_collection.insert_one(pelanggan_data)
         flash("Registrasi berhasil! Silakan login.", "success")
         return redirect(url_for('login'))
-    
+
     return render_template('register.html')
 
 #------------ PELANGGAN --------------------------------------------
