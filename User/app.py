@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 import datetime
-from pymongo import MongoClient
+from pymongo import MongoClient, ReturnDocument
 from pymongo.errors import DuplicateKeyError
 import os
 
@@ -350,6 +350,31 @@ def remove_from_cart(id_produk):
 
 
 # ------------------- MEMASUKKAN DATA KE PESANAN ---------------
+# Mencari id untuk id pesanan baru
+def get_next_order_id():
+    result = pesanan_collection.aggregate([
+        {
+            "$addFields": { 
+                "numeric_id": { "$toInt": "$_id" }
+            }
+        },
+        { 
+            "$sort": { "numeric_id": -1 }
+        },
+        { 
+            "$limit": 1 
+        }
+    ])
+
+    # Mengambil ID terbesar dan menambahkannya dengan 1
+    last_order = list(result)
+    if last_order:
+        new_order_id = str(last_order[0]['numeric_id'] + 1)
+    else:
+        new_order_id = "1"  # Jika tidak ada dokumen sebelumnya, mulai dari "1"
+    return new_order_id
+
+# Memasukan pesanan ke dalam database
 @app.route('/place_order', methods=['POST'])
 def place_order():
     customer_id = session.get('customer_id')  
@@ -370,12 +395,9 @@ def place_order():
         product_id = item['id_produk']
         quantity = item['jumlah'] 
         
-        last_order = pesanan_collection.find_one(sort=[("_id", -1)])
-        if last_order and '_id' in last_order:
-            new_order_id = str(int(last_order['_id']) + 1)
-        else:
-            new_order_id = "1"  
-            
+        # Mengambil ID pesanan berikutnya
+        new_order_id = get_next_order_id()
+        
         order_data = {
             '_id': new_order_id,
             'id_pelanggan': customer_id,
@@ -387,16 +409,12 @@ def place_order():
             'metode_pembayaran': payment_method
         }
 
-
         try:
             pesanan_collection.insert_one(order_data)
         except DuplicateKeyError:
-            print("error")
             flash("Duplicate order key error", "error")
-            # return redirect(url_for('checkout'))
+            return redirect(url_for('checkout'))
 
-
-    
     session.pop('cart', None)  # Menghapus 'cart' dari sesi
     return redirect(url_for('thankyou'))
 
