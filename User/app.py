@@ -20,11 +20,28 @@ app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
 def index():
     return render_template('index.html')
 
-
 @app.route('/shop')
 def shop():
-    produk = list(product_collection.find())
-    return render_template('shop.html', produk=produk)
+    # Mendapatkan query parameter dari URL (misalnya harga, rating, kategori)
+    sort_by = request.args.get('sort_by', 'price_asc')  # Default sort berdasarkan harga ascending
+
+    # Membangun query filter
+    query_filter = {}
+
+    # Menentukan sorting
+    if sort_by == 'price_asc':
+        sort_order = [("harga", 1)]  # Ascending
+    elif sort_by == 'price_desc':
+        sort_order = [("harga", -1)]  # Descending
+    elif sort_by == 'rating_desc':
+        sort_order = [("rating", -1)]  # Descending (rating lebih tinggi lebih baik)
+    elif sort_by == 'rating_asc':
+        sort_order = [("rating", 1)] 
+
+    # Mengambil produk dari database dengan filter dan sorting
+    produk = list(product_collection.find(query_filter).sort(sort_order))
+
+    return render_template('shop.html', produk=produk, sort_by=sort_by)
 
 @app.route('/home')
 def home():
@@ -49,6 +66,48 @@ def login():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+@app.route('/profile')
+def profile():
+    if 'username' in session:
+        customer_id = session['customer_id']  # customer_id sudah berupa string
+        pelanggan = pelanggan_collection.find_one({"_id": customer_id})  # Tidak perlu ObjectId
+        if pelanggan:
+            return render_template('profile.html', user=pelanggan)
+        else:
+            flash("User not found", "danger")
+            return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('index'))
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def update_profile():
+    if 'username' in session:
+        customer_id = session['customer_id']  # ID adalah string
+
+        if request.method == 'POST':  # Jika form dikirimkan
+            updated_data = {
+                "nama": request.form.get("nama"),
+                "username": request.form.get("username"),
+                "email": request.form.get("email"),
+                "no_hp": request.form.get("no_hp"),
+                "alamat": request.form.get("alamat"),
+            }
+            # Update data user dengan menggunakan string customer_id
+            pelanggan_collection.update_one({"_id": customer_id}, {"$set": updated_data})  
+            flash("Profile updated successfully!", "success")
+            return redirect(url_for('profile'))  # Redirect ke halaman profil setelah update
+        else:  # Jika GET, tampilkan form edit
+            user = pelanggan_collection.find_one({"_id": customer_id})  # Gunakan string customer_id
+            return render_template('update_profile.html', user=user)
+    else:
+        return redirect(url_for('login'))  # Redirect ke login jika user belum login
 
 
 @app.route('/thankyou')
@@ -106,8 +165,7 @@ def loginPW():
         
         if pelanggan and pelanggan['password'] == password: 
             session['username'] = username  
-            session['customer_id'] = pelanggan['_id']  
-           
+            session['customer_id'] = str(pelanggan['_id'])  
             flash("Login berhasil!", "success")
             return redirect(url_for('home'))
         else:
@@ -124,6 +182,7 @@ def daftar():
         password = request.form['password']
         email = request.form['email']
         no_hp = request.form['no_hp']
+        alamat = request.form['alamat']
 
         last_pelanggan = pelanggan_collection.find_one(sort=[("_id", -1)])
         if last_pelanggan and '_id' in last_pelanggan:
@@ -137,7 +196,8 @@ def daftar():
             "username": username,
             "password": password,
             "email": email,
-            "no_hp": no_hp
+            "no_hp": no_hp,
+            "alamat": alamat,
         }
         pelanggan_collection.insert_one(pelanggan_data)
         flash("Registrasi berhasil! Silakan login.", "success")

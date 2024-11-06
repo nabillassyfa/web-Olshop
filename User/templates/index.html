@@ -45,8 +45,22 @@
 					</ul>
 			
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='images/user.svg') }}"></a></li>
-						<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+							<li>
+								{% if 'username' in session %}
+									<!-- Jika sudah login, arahkan ke halaman profile -->
+									<a class="nav-link" href="{{ url_for('profile') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% else %}
+									<!-- Jika belum login, arahkan ke halaman login -->
+									<a class="nav-link" href="{{ url_for('login') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% endif %}
+							</li>
+							<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						</ul>																								
 					</ul>
 				</div>
 			</div>			

@@ -72,39 +72,61 @@
 							</div>
 						</div>
 						<div class="col-lg-7">
-							
+							<!-- Sorting Dropdown -->
+							<form action="{{ url_for('shop') }}" method="GET" class="d-flex align-items-center">
+								<label for="sort_by" class="me-2">Sort by:</label>
+								<select name="sort_by" id="sort_by" class="form-select">
+									<option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+									<option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+									<option value="rating_desc" {% if sort_by == 'rating_desc' %}selected{% endif %}>Rating: High to Low</option>
+									<option value="rating_asc" {% if sort_by == 'rating_asc' %}selected{% endif %}>Rating: Low to High</option>
+								</select>
+								<button type="submit" class="btn btn-primary ms-2">Sort</button>
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
 		<!-- End Hero Section -->
 
-		
-
 		<div class="untree_co-section product-section before-footer-section">
-		    <div class="container">
-		      	<div class="row">
+			<div class="container">
+				<div class="row">
 				{% for produk in produk %}
-		      		<!-- Start Column 1 -->
-					  <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
+					<!-- Start Column 1 -->
+					<div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
 						<form action="{{ url_for('add_to_cart', id_produk=produk['_id']) }}" method="POST">
 							<div class="product-item">
 								<img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail">
 								<h3 class="product-title">{{ produk['nama'] }}</h3>
 								<strong class="product-price">Rp{{ "{:,.0f}".format(produk['harga']) }}</strong>
+		
+								<!-- Rating Section -->
+							<div class="product-rating">
+								{% for i in range(5) %}
+									{% if i < produk['rating']|int %}
+										<span class="star filled">&#9733;</span> <!-- Filled star -->
+									{% elif i == produk['rating']|int and produk['rating'] % 1 >= 0.5 %}
+										<span class="star half-filled">&#9733;</span> <!-- Half filled star -->
+									{% else %}
+										<span class="star">&#9733;</span> <!-- Empty star -->
+									{% endif %}
+								{% endfor %}
+								<span class="rating-number">({{ produk['rating'] }})</span> <!-- Menampilkan rating sebagai angka -->
+							</div>
+
+
 								<span class="icon-cross">
 									<input type="image" src="{{ url_for('static', filename='images/cross.svg') }}" class="img-fluid mt-2" alt="Tambah ke Keranjang">
 								</span>
 							</div>
 						</form>
-					</div>					
+					</div>
 					{% endfor %}
 					<!-- End Column 1 -->
-		      	</div>
-				
-		    </div>
-		</div>
-
+				</div>
+			</div>
+		</div>		
 
 		<!-- Start Footer Section -->
 		<footer class="footer-section">

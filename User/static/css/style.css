@@ -709,3 +709,18 @@ textarea {
     height: 50px;
     border-radius: 50%;
     background: rgba(59, 93, 80, 0.2); }
+
+.product-rating .star {
+    color: #ccc; /* Warna bintang kosong (abu-abu) */
+    font-size: 18px; /* Ukuran bintang */
+}
+
+.product-rating .star.filled {
+    color: #ffcc00; /* Warna bintang terisi (kuning) */
+}
+
+.product-rating .rating-number {
+    font-size: 14px; /* Ukuran teks rating angka */
+    color: #333; /* Warna teks rating */
+    margin-left: 8px; /* Spasi antara bintang dan rating angka */
+}
