@@ -93,24 +93,29 @@
 		<div class="untree_co-section product-section before-footer-section">
 			<div class="container">			
 				<!-- Category Filter Form -->
-				<form method="get" action="{{ url_for('shop') }}" class="mb-4">
-					<label for="category">Filter by Category:</label>
-					<select name="category" id="category" onchange="this.form.submit()">
-						<option value="">All Categories</option>
-						{% for cat in kategori %}
-							<option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
-						{% endfor %}
-					</select>
-			
-					<!-- Sorting Options -->
-					<label for="sort_by">Sort by:</label>
-					<select name="sort_by" id="sort_by" onchange="this.form.submit()">
-						<option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
-						<option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
-						<option value="rating_desc" {% if sort_by == 'rating_desc' %}selected{% endif %}>Rating: High to Low</option>
-						<option value="rating_asc" {% if sort_by == 'rating_asc' %}selected{% endif %}>Rating: Low to High</option>
-					</select>
-				</form>
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<!-- Category Filter Form -->
+					<form method="get" action="{{ url_for('shop') }}" class="d-flex align-items-center mb-4">
+						<label for="category" class="me-2">Filter by Category:</label>
+						<select name="category" id="category" class="form-select w-auto me-4" onchange="this.form.submit()">
+							<option value="">All Categories</option>
+							{% for cat in kategori %}
+								<option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+							{% endfor %}
+						</select>
+					</form>
+		
+					<!-- Sorting Options Form -->
+					<form method="get" action="{{ url_for('shop') }}" class="d-flex align-items-center mb-4">
+						<label for="sort_by" class="me-2">Sort by:</label>
+						<select name="sort_by" id="sort_by" class="form-select w-auto" onchange="this.form.submit()">
+							<option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+							<option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+							<option value="rating_desc" {% if sort_by == 'rating_desc' %}selected{% endif %}>Rating: High to Low</option>
+							<option value="rating_asc" {% if sort_by == 'rating_asc' %}selected{% endif %}>Rating: Low to High</option>
+						</select>
+					</form>
+				</div>
 			
 				<!-- Product Display -->
 				<div class="row">
