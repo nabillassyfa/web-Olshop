@@ -46,8 +46,22 @@
 					</ul>
 			
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='images/user.svg') }}"></a></li>
-						<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+							<li>
+								{% if 'username' in session %}
+									<!-- Jika sudah login, arahkan ke halaman profile -->
+									<a class="nav-link" href="{{ url_for('profile') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% else %}
+									<!-- Jika belum login, arahkan ke halaman login -->
+									<a class="nav-link" href="{{ url_for('login') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% endif %}
+							</li>
+							<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						</ul>																								
 					</ul>
 				</div>
 			</div>			
@@ -209,18 +223,18 @@
 										<tr>
 											<td>{{ item.product_name }}</td>
 											<td><strong class="mx-2">x</strong>{{ item.quantity }}</td>
-											<td>${{ item.total_price }}</td>
+											<td>Rp{{ "{:,.0f}".format(item.total_price) }}</td>
 										</tr>
 										{% endfor %}
 										<tr>
 											<td class="text-black font-weight-bold"><strong>Cart Subtotal</strong></td>
 											<td></td>
-											<td class="text-black">${{ subtotal }}</td>
+											<td class="text-black">Rp{{ "{:,.0f}".format(subtotal) }}</td>
 										</tr>
 										<tr>
 											<td class="text-black font-weight-bold"><strong>Order Total</strong></td>
 											<td></td>
-											<td class="text-black font-weight-bold"><strong>${{ subtotal }}</strong></td>
+											<td class="text-black font-weight-bold"><strong>Rp{{ "{:,.0f}".format(subtotal) }}</strong></td>
 										</tr>
 									</tbody>
 								</table>

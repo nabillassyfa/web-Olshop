@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 import datetime
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 import os
 
 app = Flask(__name__, static_folder='static')
@@ -22,26 +23,42 @@ def index():
 
 @app.route('/shop')
 def shop():
-    # Mendapatkan query parameter dari URL (misalnya harga, rating, kategori)
-    sort_by = request.args.get('sort_by', 'price_asc')  # Default sort berdasarkan harga ascending
-
-    # Membangun query filter
-    query_filter = {}
-
-    # Menentukan sorting
+    # Ambil query parameter dari URL
+    sort_by = request.args.get('sort_by', 'price_asc')
+    selected_category = request.args.get('category')
+    page = int(request.args.get('page', 1))  # Default page adalah 1
+    limit = 4  # Batas produk per halaman
+    
+    # Tentukan sorting
     if sort_by == 'price_asc':
-        sort_order = [("harga", 1)]  # Ascending
+        sort_order = [("harga", 1)]
     elif sort_by == 'price_desc':
-        sort_order = [("harga", -1)]  # Descending
+        sort_order = [("harga", -1)]
     elif sort_by == 'rating_desc':
-        sort_order = [("rating", -1)]  # Descending (rating lebih tinggi lebih baik)
+        sort_order = [("rating", -1)]
     elif sort_by == 'rating_asc':
-        sort_order = [("rating", 1)] 
+        sort_order = [("rating", 1)]
+    else:
+        sort_order = [("harga", 1)]
+    
+    # Bangun query filter
+    query_filter = {}
+    if selected_category:
+        query_filter['kategori'] = selected_category
+    
+    # Hitung produk yang dilewati
+    skip = (page - 1) * limit
 
-    # Mengambil produk dari database dengan filter dan sorting
-    produk = list(product_collection.find(query_filter).sort(sort_order))
+    # Ambil produk dari database dengan filter, sorting, limit, dan pagination
+    produk = list(product_collection.find(query_filter).sort(sort_order).skip(skip).limit(limit))
+    kategori = product_collection.distinct("kategori")
 
-    return render_template('shop.html', produk=produk, sort_by=sort_by)
+    # Hitung total produk untuk menentukan jumlah halaman
+    total_produk = product_collection.count_documents(query_filter)
+    total_pages = (total_produk + limit - 1) // limit  # Total halaman
+
+    return render_template('shop.html', produk=produk, sort_by=sort_by, kategori=kategori, selected_category=selected_category, page=page, total_pages=total_pages)
+
 
 @app.route('/home')
 def home():
@@ -370,12 +387,14 @@ def place_order():
             'metode_pembayaran': payment_method
         }
 
-        
+
         try:
             pesanan_collection.insert_one(order_data)
-        except pymongo.errors.DuplicateKeyError:
-            flash("Pesanan gagal dibuat, ID sudah ada.", "danger")
-            return redirect(url_for('checkout'))
+        except DuplicateKeyError:
+            print("error")
+            flash("Duplicate order key error", "error")
+            # return redirect(url_for('checkout'))
+
 
     
     session.pop('cart', None)  # Menghapus 'cart' dari sesi
