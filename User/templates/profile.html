@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='assets/font-awesome/css/all.min.css') }}" rel="stylesheet">
+  <link href="{{ url_for('static', filename='css/style.css') }}" rel="stylesheet">
+  <title>Profile</title>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('index') }}">Furni<span>.</span></a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout(event)">Logout</a>
+                    </li>
+                </ul> -->
+            </div>
+        </div>			
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Profile</h2>
+        <table class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td><i class="fas fa-user icon"></i> <strong>Nama:</strong></td>
+                    <td>{{ user.nama }}</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-user-circle icon"></i> <strong>Username:</strong></td>
+                    <td>{{ user.username }}</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-envelope icon"></i> <strong>Email:</strong></td>
+                    <td>{{ user.email }}</td>
+                </tr>
+                <tr>
+                    <td><i class="fas fa-phone-alt icon"></i> <strong>Nomor HP:</strong></td>
+                    <td>{{ user.no_hp }}</td>
+                </tr>
+                <!-- Uncomment if you have an address field -->
+                <tr>
+                    <td><strong>Alamat:</strong></td>
+                    <td>{{ user.alamat }}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Tombol Edit Profile -->
+        <a href="{{ url_for('update_profile') }}" class="btn btn-primary">Update Profile</a>
+        <a href="{{ url_for('index') }}" class="btn btn-secondary">Back to Home</a>
+        <a class="btn btn-danger" href="#" onclick="confirmLogout(event)">Logout</a>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script>
+        function confirmLogout(event) {
+            event.preventDefault(); // Mencegah tautan default
+            if (confirm("Apakah Anda yakin ingin keluar?")) {
+                window.location.href = "{{ url_for('logout') }}"; // Redirect ke logout
+            }
+        }
+    </script>
+</body>
+</html>

@@ -35,7 +35,7 @@
 		<nav class="custom-navbar navbar navbar navbar-expand-md navbar-dark bg-dark" arial-label="Furni navigation bar">
 
 			<div class="container">
-				<a class="navbar-brand" href="{{ url_for('index') }}">Furni<span>.</span></a>
+				<a class="navbar-brand" href="{{ url_for('index') }}">noFashion.<span>.</span></a>
 			
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsFurni" aria-controls="navbarsFurni" aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -52,8 +52,22 @@
 					</ul>
 			
 					<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
-						<li><a class="nav-link" href="{{ url_for('login') }}"><img src="{{ url_for('static', filename='images/user.svg') }}"></a></li>
-						<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						<ul class="custom-navbar-cta navbar-nav mb-2 mb-md-0 ms-5">
+							<li>
+								{% if 'username' in session %}
+									<!-- Jika sudah login, arahkan ke halaman profile -->
+									<a class="nav-link" href="{{ url_for('profile') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% else %}
+									<!-- Jika belum login, arahkan ke halaman login -->
+									<a class="nav-link" href="{{ url_for('login') }}">
+										<img src="{{ url_for('static', filename='images/user.svg') }}">
+									</a>
+								{% endif %}
+							</li>
+							<li><a class="nav-link" href="{{ url_for('cart') }}"><img src="{{ url_for('static', filename='images/cart.svg') }}"></a></li>
+						</ul>																								
 					</ul>
 				</div>
 			</div>
@@ -71,40 +85,86 @@
 								<h1>Shop</h1>
 							</div>
 						</div>
-						<div class="col-lg-7">
-							
-						</div>
 					</div>
 				</div>
 			</div>
 		<!-- End Hero Section -->
 
-		
-
 		<div class="untree_co-section product-section before-footer-section">
-		    <div class="container">
-		      	<div class="row">
-				{% for produk in produk %}
-		      		<!-- Start Column 1 -->
-					  <div class="col-12 col-md-4 col-lg-3 mb-5 mb-md-0 mt-3">
-						<form action="{{ url_for('add_to_cart', id_produk=produk['_id']) }}" method="POST">
+			<div class="container">			
+				<!-- Category Filter Form -->
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<!-- Category Filter Form -->
+					<form method="get" action="{{ url_for('shop') }}" class="d-flex align-items-center mb-4">
+						<label for="category" class="me-2">Filter by Category:</label>
+						<select name="category" id="category" class="form-select w-auto me-4" onchange="this.form.submit()">
+							<option value="">All Categories</option>
+							{% for cat in kategori %}
+								<option value="{{ cat }}" {% if cat == selected_category %}selected{% endif %}>{{ cat }}</option>
+							{% endfor %}
+						</select>
+					</form>
+		
+					<!-- Sorting Options Form -->
+					<form method="get" action="{{ url_for('shop') }}" class="d-flex align-items-center mb-4">
+						<label for="sort_by" class="me-2">Sort by:</label>
+						<select name="sort_by" id="sort_by" class="form-select w-auto" onchange="this.form.submit()">
+							<option value="price_asc" {% if sort_by == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+							<option value="price_desc" {% if sort_by == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+							<option value="rating_desc" {% if sort_by == 'rating_desc' %}selected{% endif %}>Rating: High to Low</option>
+							<option value="rating_asc" {% if sort_by == 'rating_asc' %}selected{% endif %}>Rating: Low to High</option>
+						</select>
+					</form>
+				</div>
+			
+				<!-- Product Display -->
+				<div class="row">
+					{% for produk in produk %}
+						<div class="col-6 col-md-3 mb-4">
 							<div class="product-item">
-								<img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail">
-								<h3 class="product-title">{{ produk['nama'] }}</h3>
+								<img src="{{ produk['gambar'] }}" class="img-fluid product-thumbnail" alt="{{ produk['nama'] }}">
+								<h4 class="product-title">{{ produk['nama'] }}</h4>
 								<strong class="product-price">Rp{{ "{:,.0f}".format(produk['harga']) }}</strong>
-								<span class="icon-cross">
-									<input type="image" src="{{ url_for('static', filename='images/cross.svg') }}" class="img-fluid mt-2" alt="Tambah ke Keranjang">
-								</span>
+								
+								<!-- Rating Section -->
+								<div class="product-rating">
+									{% for i in range(5) %}
+										{% if i < produk['rating']|int %}
+											<span class="star filled">&#9733;</span> <!-- Filled star -->
+										{% else %}
+											<span class="star">&#9733;</span> <!-- Empty star -->
+										{% endif %}
+									{% endfor %}
+									<span class="rating-number">({{ produk['rating'] }})</span>
+								</div>
+			
+								<form action="{{ url_for('add_to_cart', id_produk=produk['_id']) }}" method="POST">
+									<span class="icon-cross">
+										<input type="image" src="{{ url_for('static', filename='images/cross.svg') }}" class="img-fluid mt-2" alt="Add to Cart">
+									</span>
+								</form>
 							</div>
-						</form>
-					</div>					
+						</div>
 					{% endfor %}
-					<!-- End Column 1 -->
-		      	</div>
-				
-		    </div>
-		</div>
-
+				</div>
+			</div>
+			<div class="pagination-container text-center">
+				<div class="pagination">
+					<!-- Previous Button -->
+					{% if page > 1 %}
+					<a href="{{ url_for('shop', sort_by=sort_by, category=selected_category, page=page-1) }}" class="btn btn-primary mx-2">Previous</a>
+					{% endif %}
+				  
+					<!-- Display Current Page and Total Pages -->
+					<span class="page-info mx-2">Page {{ page }} of {{ total_pages }}</span>
+				  
+					<!-- Next Button -->
+					{% if page < total_pages %}
+					<a href="{{ url_for('shop', sort_by=sort_by, category=selected_category, page=page+1) }}" class="btn btn-primary mx-2">Next</a>
+					{% endif %}
+				</div>
+			</div>										  
+		</div>		
 
 		<!-- Start Footer Section -->
 		<footer class="footer-section">

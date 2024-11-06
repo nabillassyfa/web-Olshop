@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for, session, flash
 import datetime
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 import os
 
 app = Flask(__name__, static_folder='static')
@@ -20,11 +21,44 @@ app.secret_key = os.environ.get('SECRET_KEY') or os.urandom(24)
 def index():
     return render_template('index.html')
 
-
 @app.route('/shop')
 def shop():
-    produk = list(product_collection.find())
-    return render_template('shop.html', produk=produk)
+    # Ambil query parameter dari URL
+    sort_by = request.args.get('sort_by', 'price_asc')
+    selected_category = request.args.get('category')
+    page = int(request.args.get('page', 1))  # Default page adalah 1
+    limit = 4  # Batas produk per halaman
+    
+    # Tentukan sorting
+    if sort_by == 'price_asc':
+        sort_order = [("harga", 1)]
+    elif sort_by == 'price_desc':
+        sort_order = [("harga", -1)]
+    elif sort_by == 'rating_desc':
+        sort_order = [("rating", -1)]
+    elif sort_by == 'rating_asc':
+        sort_order = [("rating", 1)]
+    else:
+        sort_order = [("harga", 1)]
+    
+    # Bangun query filter
+    query_filter = {}
+    if selected_category:
+        query_filter['kategori'] = selected_category
+    
+    # Hitung produk yang dilewati
+    skip = (page - 1) * limit
+
+    # Ambil produk dari database dengan filter, sorting, limit, dan pagination
+    produk = list(product_collection.find(query_filter).sort(sort_order).skip(skip).limit(limit))
+    kategori = product_collection.distinct("kategori")
+
+    # Hitung total produk untuk menentukan jumlah halaman
+    total_produk = product_collection.count_documents(query_filter)
+    total_pages = (total_produk + limit - 1) // limit  # Total halaman
+
+    return render_template('shop.html', produk=produk, sort_by=sort_by, kategori=kategori, selected_category=selected_category, page=page, total_pages=total_pages)
+
 
 @app.route('/home')
 def home():
@@ -49,6 +83,48 @@ def login():
 @app.route('/register')
 def register():
     return render_template('register.html')
+
+@app.route('/profile')
+def profile():
+    if 'username' in session:
+        customer_id = session['customer_id']  # customer_id sudah berupa string
+        pelanggan = pelanggan_collection.find_one({"_id": customer_id})  # Tidak perlu ObjectId
+        if pelanggan:
+            return render_template('profile.html', user=pelanggan)
+        else:
+            flash("User not found", "danger")
+            return redirect(url_for('login'))
+    else:
+        return redirect(url_for('login'))
+
+@app.route('/logout')
+def logout():
+    session.clear()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for('index'))
+
+@app.route('/edit_profile', methods=['GET', 'POST'])
+def update_profile():
+    if 'username' in session:
+        customer_id = session['customer_id']  # ID adalah string
+
+        if request.method == 'POST':  # Jika form dikirimkan
+            updated_data = {
+                "nama": request.form.get("nama"),
+                "username": request.form.get("username"),
+                "email": request.form.get("email"),
+                "no_hp": request.form.get("no_hp"),
+                "alamat": request.form.get("alamat"),
+            }
+            # Update data user dengan menggunakan string customer_id
+            pelanggan_collection.update_one({"_id": customer_id}, {"$set": updated_data})  
+            flash("Profile updated successfully!", "success")
+            return redirect(url_for('profile'))  # Redirect ke halaman profil setelah update
+        else:  # Jika GET, tampilkan form edit
+            user = pelanggan_collection.find_one({"_id": customer_id})  # Gunakan string customer_id
+            return render_template('update_profile.html', user=user)
+    else:
+        return redirect(url_for('login'))  # Redirect ke login jika user belum login
 
 
 @app.route('/thankyou')
@@ -106,8 +182,7 @@ def loginPW():
         
         if pelanggan and pelanggan['password'] == password: 
             session['username'] = username  
-            session['customer_id'] = pelanggan['_id']  
-           
+            session['customer_id'] = str(pelanggan['_id'])  
             flash("Login berhasil!", "success")
             return redirect(url_for('home'))
         else:
@@ -124,19 +199,27 @@ def daftar():
         password = request.form['password']
         email = request.form['email']
         no_hp = request.form['no_hp']
+        alamat = request.form['alamat']
 
-        # Simpan user di database
+        last_pelanggan = pelanggan_collection.find_one(sort=[("_id", -1)])
+        if last_pelanggan and '_id' in last_pelanggan:
+            new_id = str(int(last_pelanggan['_id']) + 1)
+        else:
+            new_id = "1" 
+            
         pelanggan_data = {
+            "_id": new_id,  
             "nama": nama,
             "username": username,
             "password": password,
             "email": email,
-            "no_hp": no_hp
+            "no_hp": no_hp,
+            "alamat": alamat,
         }
         pelanggan_collection.insert_one(pelanggan_data)
         flash("Registrasi berhasil! Silakan login.", "success")
         return redirect(url_for('login'))
-    
+
     return render_template('register.html')
 
 #------------ PELANGGAN --------------------------------------------
@@ -231,23 +314,27 @@ def pesanan():
 def add_to_cart(id_produk):
     id_produk = str(id_produk)
     produk = product_collection.find_one({'_id': id_produk})  
-
     if produk:
         if 'cart' not in session:
             session['cart'] = []
+
+       
+        cart = session['cart']
         
-        item_in_cart = next((item for item in session['cart'] if item['id_produk'] == id_produk), None)
-        
+        item_in_cart = next((item for item in cart if item['id_produk'] == id_produk), None)
+
         if item_in_cart:
             item_in_cart['jumlah'] += 1
         else:
-            session['cart'].append({
+            cart.append({
                 'id_produk': id_produk,
-                'nama_produk': produk['nama'],  
+                'nama_produk': produk['nama'],
                 'harga': produk['harga'],
                 'jumlah': 1,
-                'gambar': produk['gambar']  
+                'gambar': produk['gambar']
             })
+        session['cart'] = cart
+        session.modified = True  
     else:
         print("Produk tidak ditemukan")
 
@@ -270,26 +357,49 @@ def place_order():
         flash("Please log in to place an order.", "warning")
         return redirect(url_for('login'))
 
-    # Ambil data dari formulir
-    product_id = request.form['product_id']
-    quantity = int(request.form['quantity'])
     delivery_address = request.form['delivery_address']
     payment_method = request.form['payment_method']
 
-    # Buat data pesanan
-    order_data = {
-        'id_pelanggan': customer_id,
-        'id_produk': product_id,
-        'order_date': datetime.datetime.now().strftime('%Y-%m-%d'),  
-        'status': 'Pending', 
-        'jumlah_harga_pesanan': quantity * get_product_price(product_id),  
-        'alamat_pengiriman': delivery_address,
-        'metode_pembayaran': payment_method
-    }
+    cart_items = session.get('cart', [])
+    
+    if not cart_items:
+        flash("Keranjang belanja kosong.", "warning")
+        return redirect(url_for('cart'))
 
-    pesanan_collection.insert_one(order_data)
+    for item in cart_items:
+        product_id = item['id_produk']
+        quantity = item['jumlah'] 
+        
+        last_order = pesanan_collection.find_one(sort=[("_id", -1)])
+        if last_order and '_id' in last_order:
+            new_order_id = str(int(last_order['_id']) + 1)
+        else:
+            new_order_id = "1"  
+            
+        order_data = {
+            '_id': new_order_id,
+            'id_pelanggan': customer_id,
+            'id_produk': product_id,
+            'order_date': datetime.datetime.now().strftime('%Y-%m-%d'),
+            'status': 'Pending',
+            'jumlah_harga_pesanan': quantity * get_product_price(product_id),
+            'alamat_pengiriman': delivery_address,
+            'metode_pembayaran': payment_method
+        }
 
+
+        try:
+            pesanan_collection.insert_one(order_data)
+        except DuplicateKeyError:
+            print("error")
+            flash("Duplicate order key error", "error")
+            # return redirect(url_for('checkout'))
+
+
+    
+    session.pop('cart', None)  # Menghapus 'cart' dari sesi
     return redirect(url_for('thankyou'))
+
 
 def get_product_price(product_id):
     product = product_collection.find_one({'_id':(product_id)})
