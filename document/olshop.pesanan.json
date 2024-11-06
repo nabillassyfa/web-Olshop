@@ -1,0 +1,100 @@
+[{
+  "_id": "4",
+  "id_pelanggan": "2",
+  "id_produk": "3",
+  "order_date": "2024-11-02",
+  "status": "selesai",
+  "jumlah_harga_pesanan": 200000,
+  "alamat_pengiriman": "Jl. Cihampelas No. 10, Bandung",
+  "metode_pembayaran": "Transfer Bank"
+},
+{
+  "_id": "5",
+  "id_pelanggan": "3",
+  "id_produk": "5",
+  "order_date": "2024-11-02",
+  "status": "dikirim",
+  "jumlah_harga_pesanan": 50000,
+  "alamat_pengiriman": "Jl. Dago No. 8, Bandung",
+  "metode_pembayaran": "Kartu Kredit"
+},
+{
+  "_id": "6",
+  "id_pelanggan": "4",
+  "id_produk": "7",
+  "order_date": "2024-11-03",
+  "status": "diterima",
+  "jumlah_harga_pesanan": 90000,
+  "alamat_pengiriman": "Jl. Setiabudi No. 15, Bandung",
+  "metode_pembayaran": "Transfer Bank"
+},
+{
+  "_id": "8",
+  "id_pelanggan": "6",
+  "id_produk": "4",
+  "order_date": "2024-11-04",
+  "status": "dikirim",
+  "jumlah_harga_pesanan": 120000,
+  "alamat_pengiriman": "Jl. Merdeka No. 12, Bandung",
+  "metode_pembayaran": "Kartu Kredit"
+},
+{
+  "_id": "9",
+  "id_pelanggan": "1",
+  "id_produk": "6",
+  "order_date": "2024-11-04",
+  "status": "diproses",
+  "jumlah_harga_pesanan": 180000,
+  "alamat_pengiriman": "Jl. Raya No. 1, Bandung",
+  "metode_pembayaran": "COD"
+},
+{
+  "_id": "10",
+  "id_pelanggan": "2",
+  "id_produk": "9",
+  "order_date": "2024-11-05",
+  "status": "diproses",
+  "jumlah_harga_pesanan": 100000,
+  "alamat_pengiriman": "Jl. Cihampelas No. 10, Bandung",
+  "metode_pembayaran": "Transfer Bank"
+},
+{
+  "_id": "11",
+  "id_pelanggan": "3",
+  "id_produk": "1",
+  "order_date": "2024-11-05",
+  "status": "diterima",
+  "jumlah_harga_pesanan": 75000,
+  "alamat_pengiriman": "Jl. Dago No. 8, Bandung",
+  "metode_pembayaran": "COD"
+},
+{
+  "_id": "13",
+  "id_pelanggan": "5",
+  "id_produk": "7",
+  "order_date": "2024-11-06",
+  "status": "selesai",
+  "jumlah_harga_pesanan": 90000,
+  "alamat_pengiriman": "Jl. Asia Afrika No. 9, Bandung",
+  "metode_pembayaran": "Transfer Bank"
+},
+{
+  "_id": "2",
+  "id_pelanggan": "3",
+  "id_produk": "5",
+  "order_date": "2024-11-02",
+  "status": "diterima",
+  "jumlah_harga_pesanan": 50000,
+  "alamat_pengiriman": "Jl. Dago No. 8, Bandung",
+  "metode_pembayaran": "Kartu Kredit"
+},
+{
+  "_id": "3",
+  "id_pelanggan": "4",
+  "id_produk": "1",
+  "order_date": "2024-11-03",
+  "status": "selesai",
+  "jumlah_harga_pesanan": 90000,
+  "alamat_pengiriman": "Jl. Setiabudi No. 15, Bandung",
+  "metode_pembayaran": "Transfer Bank"
+}]

@@ -1,0 +1,54 @@
+[{
+  "_id": "1",
+  "username": "rere",
+  "password": "reee",
+  "nama": "Revana",
+  "email": "rerevana@gmail.com",
+  "no_hp": "081234567890",
+  "alamat": "Jl. Gegerkalong no 102"
+},
+{
+  "_id": "2",
+  "username": "legi",
+  "password": "legipass",
+  "nama": "Legi",
+  "email": "legi@gmail.com",
+  "no_hp": "081234567891",
+  "alamat": "Jl. Cihampelas no 123"
+},
+{
+  "_id": "3",
+  "username": "daffa",
+  "password": "daffapass",
+  "nama": "Daffa",
+  "email": "daffa@gmail.com",
+  "no_hp": "081234567892",
+  "alamat": "Jl. Dago no 45"
+},
+{
+  "_id": "4",
+  "username": "rifky",
+  "password": "rifkypass",
+  "nama": "Rifky",
+  "email": "rifky@gmail.com",
+  "no_hp": "081234567893",
+  "alamat": "Jl. Setiabudi no 78"
+},
+{
+  "_id": "5",
+  "username": "iqbal",
+  "password": "iqbalpass",
+  "nama": "Iqbal",
+  "email": "iqbal@gmail.com",
+  "no_hp": "081234567894",
+  "alamat": "Jl. Asia Afrika no 56"
+},
+{
+  "_id": "6",
+  "username": "nabilla",
+  "password": "nabillapass",
+  "nama": "Nabilla",
+  "email": "nabilla@gmail.com",
+  "no_hp": "081234567895",
+  "alamat": "Jl. Merdeka no 12"
+}]

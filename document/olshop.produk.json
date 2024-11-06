@@ -1,0 +1,90 @@
+[{
+  "_id": "1",
+  "nama": "Kaos Polos",
+  "harga": 75000,
+  "kategori": "Pakaian",
+  "stok": 100,
+  "deskripsi": "Kaos polos nyaman dan berkualitas.",
+  "rating": 4.5,
+  "gambar": "https://www.freepnglogos.com/uploads/kaos-polos-png/kaos-polos-black-shirt-png-image-transparent-35.png"
+},
+{
+  "_id": "3",
+  "nama": "Jaket Denim",
+  "harga": 200000,
+  "kategori": "Jaket",
+  "stok": 30,
+  "deskripsi": "Jaket denim trendi untuk gaya kasual.",
+  "rating": 4.6,
+  "gambar": "https://img.id.my-best.com/product_images/1ac3c2a792bcb8276a08d9d01c81307f.png"
+},
+{
+  "_id": "4",
+  "nama": "Kemeja Flanel",
+  "harga": 120000,
+  "kategori": "Kemeja",
+  "stok": 40,
+  "deskripsi": "Kemeja flanel hangat dan nyaman dipakai.",
+  "rating": 4.4,
+  "gambar": "https://karambeeakonveksi.com/wp-content/uploads/2016/10/kemeja_flanel_03.png"
+},
+{
+  "_id": "5",
+  "nama": "Topi Baseball",
+  "harga": 50000,
+  "kategori": "Aksesoris",
+  "stok": 80,
+  "deskripsi": "Topi baseball kasual untuk melengkapi penampilan.",
+  "rating": 4.3,
+  "gambar": "https://www.pngarts.com/files/4/Baseball-Cap-PNG-Image-Transparent.png"
+},
+{
+  "_id": "6",
+  "nama": "Sweater Rajut",
+  "harga": 180000,
+  "kategori": "Pakaian",
+  "stok": 25,
+  "deskripsi": "Sweater rajut nyaman dan hangat, cocok untuk musim dingin.",
+  "rating": 4.8,
+  "gambar": "https://png.pngtree.com/png-vector/20240805/ourmid/pngtree-christmas-event-knit-sweater-collection-isolated-on-transparent-background-png-image_13211187.png"
+},
+{
+  "_id": "7",
+  "nama": "Sandal Kulit",
+  "harga": 90000,
+  "kategori": "Sepatu",
+  "stok": 60,
+  "deskripsi": "Sandal kulit asli yang nyaman dipakai sehari-hari.",
+  "rating": 4.5,
+  "gambar": "https://id-test-11.slatic.net/p/cd9c3a98548addc202fb12f2dfe3564e.png"
+},
+{
+  "_id": "8",
+  "nama": "WindBreaker",
+  "kategori": "Jaket",
+  "deskripsi": "Jaket anti hujan yang keren banget",
+  "stok": 104,
+  "rating": 5,
+  "harga": 5000000,
+  "gambar": "https://www.ion-products.com/system/product_picture_gallery_pictures/files/5cd4/da56/ae69/837c/3a00/00db/original/47900-5483_ION_-_Windbreaker_Jacket_Shelter_black_front.png"
+},
+{
+  "_id": "9",
+  "nama": "Kaos Polo",
+  "kategori": "Pakaian",
+  "deskripsi": "Kaos polo nyaman dan sejuk",
+  "stok": 245,
+  "rating": 4.5,
+  "harga": 100000,
+  "gambar": "https://png.pngtree.com/png-vector/20231014/ourmid/pngtree-black-polo-shirt-mockup-cutout-png-file-png-image_10159097.png"
+},
+{
+  "_id": "2",
+  "nama": "Topi Cowboy",
+  "harga": 75000,
+  "kategori": "Aksesoris",
+  "stok": 113,
+  "deskripsi": "KTopi keren berbahan kulit.",
+  "rating": 4.5,
+  "gambar": "https://www.freeiconspng.com/uploads/cowboy-hat-png-16.png"
+}]
